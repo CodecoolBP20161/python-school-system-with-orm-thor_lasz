@@ -13,10 +13,13 @@ class BaseModel(Model):
 
 class City(BaseModel):
     city = CharField()
-    school_city = CharField
+    school_city = CharField()
 
 class School(BaseModel):
     city = CharField()
+
+    def applicants(self):
+        return self.applicant
 
 class Applicant(BaseModel):
     """Model representation of a Codecool class."""
@@ -24,12 +27,5 @@ class Applicant(BaseModel):
     last_name = CharField()
     email = CharField()
     city = CharField
-    application_code = CharField
+    application_code = CharField()
     school = ForeignKeyField(School, related_name='applicant', default=None)
-
-    # def mentors(self):
-    #     return self.mentor
-
-db.connect()
-db.create_tables([School, Applicant, City], safe=True)
-bp1 = School.create(city = "Budapest", year=2016)
