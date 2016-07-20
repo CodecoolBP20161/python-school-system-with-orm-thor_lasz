@@ -1,9 +1,18 @@
 # New applicants arrive into your project database by this script.
 # You can run it anytime to generate new data!
-
+import random
+import string
 from models import *
 
+def id_generator(ids):
+
+    id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
+    while id in ids:
+        id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
+    return id
+
 db.connect()
+db.drop_tables([School, Applicant, City, Mentor], safe=True)
 db.create_tables([School, Applicant, City, Mentor], safe=True)
 
 bp = School.create(city="Budapest")
@@ -33,10 +42,6 @@ applicants = [
     {"first_name": "Philip", "last_name": "Fry", "email": "iloveleela@gmail.com", "city": "New New York"}
 ]
 
-for school in schools:
-    School.create(
-        city=school
-    )
 for key, value in cities.items():
     City.create(
         city=key,
@@ -63,3 +68,17 @@ mentor2 = Mentor.create(
     email="",
     school=miskolc
 )
+
+ids = []
+for applicant in Applicant.select():
+    ids.append(applicant.application_code)
+
+for applicant in Applicant.select().where(Applicant.application_code >> None):
+    varos = City.select().where(City.city == applicant.city)
+    print(varos.school_city)
+    applicant.application_code = id_generator(ids)
+    applicant.save()
+
+for applicant in Applicant.select().where(Applicant.school >> None):
+    applicant.school = 1
+    applicant.save()
