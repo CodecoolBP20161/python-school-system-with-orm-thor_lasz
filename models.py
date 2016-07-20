@@ -11,21 +11,27 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+
 class City(BaseModel):
     city = CharField()
     school_city = CharField()
 
+
 class School(BaseModel):
     city = CharField()
 
-    def applicants(self):
-        return self.applicant
 
 class Applicant(BaseModel):
-    """Model representation of a Codecool class."""
     first_name = CharField()
     last_name = CharField()
     email = CharField()
     city = CharField
-    application_code = CharField()
-    school = ForeignKeyField(School, related_name='applicant', default=None)
+    application_code = CharField(null=True)
+    school = ForeignKeyField(School, related_name='applicant', null=True)
+
+
+class Mentor(BaseModel):
+    first_name = CharField()
+    last_name = CharField()
+    email = CharField()
+    school = ForeignKeyField(School, related_name="mentor", null=True)
