@@ -1,6 +1,7 @@
 import random
 import string
 from models import *
+from datetime import *
 
 
 def id_generator(ids):
@@ -14,22 +15,40 @@ def id_generator(ids):
 def establish_connection():
     """ Connects to the database and creates the necessary tables. """
     db.connect()
-    db.drop_tables([School, Applicant, City, Mentor], safe=True)
-    db.create_tables([School, Applicant, City, Mentor], safe=True)
+    db.drop_tables([InterviewSlot, School, Applicant, City, Mentor], safe=True)
+    db.create_tables([InterviewSlot, School, Applicant, City, Mentor], safe=True)
 
 
 def populate_tables():
     """ Populates the tables with the example data. """
-    cities, applicants, mentors = example_data()
+    cities, applicants, mentors, interview_slots = example_data()
 
     with db.atomic():
         City.insert_many(cities).execute()
         Applicant.insert_many(applicants).execute()
         Mentor.insert_many(mentors).execute()
+        InterviewSlot.insert_many(interview_slots).execute()
 
 
 def example_data():
     """ Contains the example data for populating the tables in the database. """
+
+    interview_slots = [
+        {"start": datetime(2016, 8, 15, 10, 0), "end": datetime(2016, 8, 15, 11, 0)},
+        {"start": datetime(2016, 8, 15, 13, 0), "end": datetime(2016, 8, 15, 14, 0)},
+        {"start": datetime(2016, 8, 15, 15, 0), "end": datetime(2016, 8, 15, 16, 0)},
+        {"start": datetime(2016, 8, 16, 10, 0), "end": datetime(2016, 8, 16, 11, 0)},
+        {"start": datetime(2016, 8, 16, 13, 0), "end": datetime(2016, 8, 16, 14, 0)},
+        {"start": datetime(2016, 8, 16, 15, 0), "end": datetime(2016, 8, 16, 16, 0)},
+        {"start": datetime(2016, 8, 17, 10, 0), "end": datetime(2016, 8, 17, 11, 0)},
+        {"start": datetime(2016, 8, 17, 13, 0), "end": datetime(2016, 8, 17, 14, 0)},
+        {"start": datetime(2016, 8, 17, 15, 0), "end": datetime(2016, 8, 17, 16, 0)},
+        {"start": datetime(2016, 8, 18, 10, 0), "end": datetime(2016, 8, 18, 11, 0)},
+        {"start": datetime(2016, 8, 18, 13, 0), "end": datetime(2016, 8, 18, 14, 0)},
+        {"start": datetime(2016, 8, 19, 10, 0), "end": datetime(2016, 8, 19, 11, 0)},
+        {"start": datetime(2016, 8, 19, 13, 0), "end": datetime(2016, 8, 19, 14, 0)}
+
+    ]
 
     cities = [
         {"city": "Érd", "school_city": "Budapest"},
@@ -63,4 +82,4 @@ def example_data():
         {"first_name": "Lord", "last_name": "Nibbler", "email": "iamcute@nibblonians.niblo", "school": miskolc}
     ]
 
-    return cities, applicants, mentors
+    return cities, applicants, mentors, interview_slots
