@@ -84,6 +84,25 @@ class SecondStory():
             print("\n")
 
 
+class FourthStory():
+
+    def __init__(self):
+        print("Fourth Story: ")
+        print("Here you can check the details of you interview.\n")
+
+        application_codes = []
+        for applicant in Applicant.select():
+            application_codes.append(applicant.application_code)
+
+        current_application_code = input("Please give in your application code: ")
+        if current_application_code in application_codes:
+            your_interview = Applicant.get(current_application_code == Applicant.application_code).interview
+            # start, end, mentor, name of the school (?)
+            print("\nYour interview starts at {0}".format(your_interview.start))
+            print("\nYour interview ends at {0}".format(your_interview.end))
+            print("\nYour interview will be conducted by {0}".format(your_interview.mentor))
+
+
 # from peewee import *
 # from models import *
 #

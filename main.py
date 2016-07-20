@@ -12,6 +12,7 @@ class MainMenu():
         populator.populate_tables()
         self.main_menu = ["Applicant's menu", "Administrator's menu", "Mentor's menu"]
         self.administrator_menu = ["Story 1: Handle new applications", "Story 2: Assign interview slot to applicants"]
+        self.applicant_menu = ["Story 4: Interview details"]
 
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
         print("\nPlease choose from the following options:\n")
@@ -46,8 +47,16 @@ class MainMenu():
                 self.state = "mentor"
 
     def applicant(self):
-        print("applicant menu")
+        for point in self.applicant_menu:
+            print("{0}.: {1}".format(self.applicant_menu.index(point)+1, point))
+        print("\nPress 'x' to exit\n")
         user_input = getpass.getpass(prompt="")
+
+        if user_input == "x":
+            self.state = "main"
+            return
+        elif user_input == "1":
+            FourthStory()
 
     def administrator(self):
         for point in self.administrator_menu:

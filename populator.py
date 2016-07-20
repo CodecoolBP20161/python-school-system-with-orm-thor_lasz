@@ -29,6 +29,14 @@ def populate_tables():
         Mentor.insert_many(mentors).execute()
         InterviewSlot.insert_many(interview_slots).execute()
 
+        for interview in InterviewSlot.select():
+            print(interview)
+            random_mentor = Mentor.select() #.order_by(fn.Random)
+            # random_mentor = random_mentor.get()
+
+            print(random_mentor)
+            # interview.mentor_id = lucky_mentor
+
 
 def example_data():
     """ Contains the example data for populating the tables in the database. """
