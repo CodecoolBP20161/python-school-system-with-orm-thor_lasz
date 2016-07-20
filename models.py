@@ -28,6 +28,7 @@ class Applicant(BaseModel):
     city = CharField()
     application_code = CharField(null=True)
     school = ForeignKeyField(School, related_name='applicant', null=True)
+    interview = DateField(null=True)
 
 
 class Mentor(BaseModel):
@@ -35,3 +36,9 @@ class Mentor(BaseModel):
     last_name = CharField()
     email = CharField()
     school = ForeignKeyField(School, related_name="mentor", null=True)
+
+
+class InterviewSlot(BaseModel):
+    slot = DateField()
+    mentor = ForeignKeyField(Mentor, related_name="interview", null=True)
+    applicant = ForeignKeyField(Applicant, related_name="interview", null=True)
