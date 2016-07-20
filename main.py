@@ -1,11 +1,16 @@
 from models import *
+import populator
+from stories import *
 
 
 class MainMenu():
     state = "main"
 
     def __init__(self):
+        populator.establish_connection()
+        populator.populate_tables()
         self.main_menu = ["Applicant's menu", "Administrator's menu", "Mentor's menu"]
+        self.administrator_menu = ["Story 1: Handle new applications"]
 
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
         print("\nPlease choose from the following options:\n")
@@ -28,7 +33,7 @@ class MainMenu():
             user_input = input()
 
             if user_input == "x":
-                return
+                exit()
             elif user_input == "1":
                 self.state = "applicant"
                 return
@@ -44,8 +49,16 @@ class MainMenu():
         user_input = input()
 
     def administrator(self):
-        print("administrator menu")
+        for point in self.administrator_menu:
+            print("{0}.: {1}".format(self.administrator_menu.index(point)+1, point))
+        print("\nPress 'x' to exit\n")
         user_input = input()
+
+        if user_input == "x":
+            self.state = "main"
+            return
+        elif user_input == "1":
+            FirstStory()
 
     def mentor(self):
         print("mentor menu")
