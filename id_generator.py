@@ -11,5 +11,3 @@ def id_generator():
     if id in ids:
         id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
     return id
-
-print(id_generator())
