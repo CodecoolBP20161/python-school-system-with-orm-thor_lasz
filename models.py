@@ -25,7 +25,7 @@ class Applicant(BaseModel):
     first_name = CharField()
     last_name = CharField()
     email = CharField()
-    city = CharField
+    city = CharField()
     application_code = CharField(null=True)
     school = ForeignKeyField(School, related_name='applicant', null=True)
 

@@ -19,6 +19,16 @@ bp = School.create(city="Budapest")
 miskolc = School.create(city="Miskolc")
 krakow = School.create(city="Krakow")
 
+# Bulk insertet beépíteni:
+# data_source = [
+#     {'field1': 'val1-1', 'field2': 'val1-2'},
+#     {'field1': 'val2-1', 'field2': 'val2-2'},
+#     # ...
+# ]
+#
+# for data_dict in data_source:
+#     Model.create(**data_dict)
+
 cities = {
     "Érd": "Budapest",
     "Kiskunbüdösbütykös": "Miskolc",
@@ -74,11 +84,10 @@ for applicant in Applicant.select():
     ids.append(applicant.application_code)
 
 for applicant in Applicant.select().where(Applicant.application_code >> None):
-    varos = City.select().where(City.city == applicant.city)
-    print(varos.school_city)
     applicant.application_code = id_generator(ids)
     applicant.save()
 
 for applicant in Applicant.select().where(Applicant.school >> None):
-    applicant.school = 1
+    varos = City.get(City.city == applicant.city).school_city
+    applicant.school = School.get(School.city == varos).id
     applicant.save()
