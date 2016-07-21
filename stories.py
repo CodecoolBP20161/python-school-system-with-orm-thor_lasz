@@ -89,10 +89,11 @@ class ThirdStory():
 
         ids = []
         for applicant in Applicant.select():
-            ids.append(Applicant.application_code)
+            ids.append(applicant.application_code)
         app_num = input("Please give me your application number: ")
         if app_num in ids:
-            print(Applicant.get(app_num == Applicant.application_code)) #need to return all arguments
+            applicant = Applicant.get(app_num == Applicant.application_code)
+            print(tabulate(applicant, headers=["First name", "Last name", "Email", "City", "Application code", "School"]))
 
         else:
             print('Not a valid application code!')
