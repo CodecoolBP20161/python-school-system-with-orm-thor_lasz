@@ -1,6 +1,7 @@
 from models import *
 import populator
 from tabulate import tabulate
+from datetime import datetime
 import getpass
 
 
@@ -139,17 +140,22 @@ class SixthStory():
             print("{0}.: {1}".format(menu_points.index(point) + 1, point))
         print("\nPress 'x' to exit\n")
         # for applicant in Applicant.select():
-        #    print(applicant.interview.mentor)
+        #     print(applicant.interview.mentor.first_name)
         user_input = int(getpass.getpass(prompt=""))
         if user_input == 1: #status
-            filter_by = "status"
+            filter_by = input("Status? ")
+            result = (Applicant.select(Applicant.first_name,
+                                       Applicant.last_name,
+                                       Applicant.email,
+                                       Applicant.city) \
+                      .where(Applicant.status == filter_by).tuples())
         elif user_input == 2: #time
-            filter_by = input ("day? yr-mth-day")
-            result = Applicant.select(Applicant.first_name,
-                                            Applicant.last_name,
-                                            Applicant.email,
-                                            Applicant.city) \
-                .join(InterviewSlot, JOIN.FULL, Applicant.interview.start == InterviewSlot.start).where(InterviewSlot.start.year == filter_by)
+            date_input = str(input('date? '))
+            filter_by = datetime.strptime(date_input, '%Y-%m-%d')
+            result = []
+            for applicant in Applicant.select():
+                if  filter_by < applicant.interview.start :
+                    result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
         elif user_input == 3: #location
             filter_by = input ("location? ")
             result = (Applicant.select(Applicant.first_name,
@@ -163,7 +169,7 @@ class SixthStory():
                                             Applicant.last_name,
                                             Applicant.email,
                                             Applicant.city)\
-                                        .where(Applicant.email == filter_by)
+                                        .where(Applicant.email == filter_by).tuples()
         elif user_input == 5: #school
             filter_by = input("School? ")
             result = (Applicant.select(Applicant.first_name,
@@ -173,11 +179,10 @@ class SixthStory():
                     .join(City, JOIN.FULL, Applicant.city == City.city).where(City.school_city == filter_by).tuples())  #.join(City, Applicant.city == City.city)
         elif user_input == 6: #mentor
             filter_by = input("mentor? ")
-            result = Applicant.select(Applicant.first_name,
-                                            Applicant.last_name,
-                                            Applicant.email,
-                                            Applicant.city)\
-                                        .where(Applicant.interview.mentor.first_name == filter_by)
+            result = []
+            for applicant in Applicant.select():
+                if filter_by == applicant.interview.mentor.first_name:
+                    result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
         print ("\n")
         print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
         print("\n\n")
