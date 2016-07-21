@@ -87,7 +87,7 @@ class SecondStory():
             print("\n")
 
 
-class ThirdStory()
+class ThirdStory():
 
     def __init__(self):
 

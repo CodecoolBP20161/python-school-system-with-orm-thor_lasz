@@ -34,6 +34,7 @@ def populate_tables():
             interview.mentor_id = Mentor.get(Mentor.id == random.randint(1, 2))
             interview.save()
 
+
 def example_data():
     """ Contains the example data for populating the tables in the database. """
 
