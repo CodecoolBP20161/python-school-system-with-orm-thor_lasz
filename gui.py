@@ -12,23 +12,72 @@ class MyFirstGUI:
         self.logo = PhotoImage(file='./logo.gif')
         master.geometry("400x400")
         master.title("Rubik's cube")
-        frame = Frame(master)
-        frame.place(x=0, y=0, width=500, height=455)
-        self.canvas = Canvas(frame, bg = 'white', width=500, height=455)
+        self.frame = Frame(master)
+        self.main_menu()
+
+    def main_menu(self):
+        self.frame.destroy()
+        self.frame = Frame(self.master)
+        self.frame.place(x=0, y=0, width=500, height=455)
+        self.canvas = Canvas(self.frame, bg='white', width=500, height=455)
         self.canvas.pack()
         self.canvas.create_image(280, 0, anchor=NE, image=self.logo)
 
-        self.admin_button = Button(self.canvas, text="Administrator", command=lambda: self.adminmenu())
-        self.admin_button.place(x= 150, y= 200, width= 100, height= 25)
-        self.applicant_button = Button(self.canvas, text="Applicant", command=lambda: self.applicantmenu())
+        self.admin_button = Button(self.canvas, text="Administrator", command=lambda: self.admin_menu())
+        self.admin_button.place(x=150, y=200, width=100, height=25)
+        self.applicant_button = Button(self.canvas, text="Applicant", command=lambda: self.applicant_menu())
         self.applicant_button.place(x=150, y=230, width=100, height=25)
-        self.mentor_button = Button(self.canvas, text="Mentor", command=lambda: self.mentormenu())
+        self.mentor_button = Button(self.canvas, text="Mentor", command=lambda: self.mentor_menu())
         self.mentor_button.place(x=150, y=260, width=100, height=25)
         self.tables_button = Button(self.canvas, text="Show tables", command=self.show_tables)
         self.tables_button.place(x=150, y=290, width=100, height=25)
-        self.close_button = Button(self.canvas, text="Close", command=master.quit)
+        self.close_button = Button(self.canvas, text="Close", command=self.master.quit)
         self.close_button.place(x=150, y=320, width=100, height=25)
         self.canvas.delete('all')
+
+    def admin_menu(self):
+        self.frame.destroy()
+        self.frame = Frame(self.master)
+        self.frame.place(x=0, y=0, width=500, height=455)
+        self.canvas = Canvas(self.frame, bg='white', width=500, height=455)
+        self.canvas.pack()
+        self.canvas.create_image(280, 0, anchor=NE, image=self.logo)
+        self.admin_button = Button(self.canvas, text="Story 1: Handle new applications", command=lambda: self.admin_menu())
+        self.admin_button.place(x=75, y=200, width=250, height=25)
+        self.applicant_button = Button(self.canvas, text="Story 2: Assign interview slot to applicants", command=lambda: self.applicant_menu())
+        self.applicant_button.place(x=75, y=230, width=250, height=25)
+        self.mentor_button = Button(self.canvas, text="Story 6: Application detail", command=lambda: self.mentor_menu())
+        self.mentor_button.place(x=75, y=260, width=250, height=25)
+        self.close_button = Button(self.canvas, text="Back", command=lambda: self.main_menu())
+        self.close_button.place(x=75, y=320, width=250, height=25)
+
+
+    def applicant_menu(self):
+        self.frame.destroy()
+        self.frame = Frame(self.master)
+        self.frame.place(x=0, y=0, width=500, height=455)
+        self.canvas = Canvas(self.frame, bg='white', width=500, height=455)
+        self.canvas.pack()
+        self.canvas.create_image(280, 0, anchor=NE, image=self.logo)
+        self.admin_button = Button(self.canvas, text="Application details (story 3)",
+                                   command=lambda: self.admin_menu())
+        self.admin_button.place(x=75, y=200, width=250, height=25)
+        self.applicant_button = Button(self.canvas, text="Interview details (story 4)",
+                                       command=lambda: self.applicant_menu())
+        self.applicant_button.place(x=75, y=230, width=250, height=25)
+        self.close_button = Button(self.canvas, text="Back", command=lambda: self.main_menu())
+        self.close_button.place(x=75, y=320, width=250, height=25)
+
+    def mentor_menu(self):
+        self.frame.destroy()
+        self.frame = Frame(self.master)
+        self.frame.place(x=0, y=0, width=500, height=455)
+        self.canvas = Canvas(self.frame, bg='white', width=500, height=455)
+        self.canvas.pack()
+        self.canvas.create_image(280, 0, anchor=NE, image=self.logo)
+        self.close_button = Button(self.canvas, text="Back", command=lambda: self.main_menu())
+        self.close_button.place(x=75, y=320, width=250, height=25)
+
 
     def show_tables(self):
         self.top = Toplevel(self.master)
