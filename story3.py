@@ -6,12 +6,13 @@ def __init__(self):
     app_num = input("Please give me your application number: ")
     if app_num in ids:
 
-        print('First name: ', Applicant.get(app_num == Applicant.application_code).first_name)
-        print('Last name: ', Applicant.get(app_num == Applicant.application_code).last_name)
-        print('Email: ', Applicant.get(app_num == Applicant.application_code).email)
-        print('City: ', Applicant.get(app_num == Applicant.application_code).city)
-        print('Application code: ', Applicant.get(app_num == Applicant.application_code).application_code)
-        print('School: ', Applicant.get(app_num == Applicant.application_code).school)
+        Applicant_objekt = Applicant.get(app_num == Applicant.application_code)
+        print('First name: ', Applicant_objekt.first_name)
+        print('Last name: ', Applicant_objekt.last_name)
+        print('Email: ', Applicant_objekt.email)
+        print('City: ', Applicant_objekt.city)
+        print('Application code: ', Applicant_objekt.application_code)
+        print('School: ', Applicant_objekt.school)
 
 
     else:
