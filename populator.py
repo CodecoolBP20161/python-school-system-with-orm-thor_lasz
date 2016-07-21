@@ -2,6 +2,7 @@ import random
 import string
 from models import *
 from datetime import *
+from random import randint
 
 
 def id_generator(ids):
@@ -30,13 +31,8 @@ def populate_tables():
         InterviewSlot.insert_many(interview_slots).execute()
 
         for interview in InterviewSlot.select():
-            print(interview)
-            random_mentor = Mentor.select() #.order_by(fn.Random)
-            # random_mentor = random_mentor.get()
-
-            print(random_mentor)
-            # interview.mentor_id = lucky_mentor
-
+            interview.mentor_id = Mentor.get(Mentor.id == random.randint(1, 2))
+            interview.save()
 
 def example_data():
     """ Contains the example data for populating the tables in the database. """

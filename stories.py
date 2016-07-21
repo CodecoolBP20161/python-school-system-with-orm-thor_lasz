@@ -71,7 +71,10 @@ class SecondStory():
         else:
             updated_applicants = []
             for applicant in Applicant.select().where(Applicant.interview >> None):
-                interview = InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(fn.Random()).limit(1)[0]
+                interview = InterviewSlot.select().where(
+                    InterviewSlot.reserved >> False,
+                    InterviewSlot.mentor_id == applicant.school_id
+                ).order_by(fn.Random()).limit(1)[0]
                 interview.reserved = True
                 interview.save()
                 applicant.interview = interview
@@ -97,27 +100,11 @@ class FourthStory():
         current_application_code = input("Please give in your application code: ")
         if current_application_code in application_codes:
             your_interview = Applicant.get(current_application_code == Applicant.application_code).interview
-            # start, end, mentor, name of the school (?)
+
             print("\nYour interview starts at {0}".format(your_interview.start))
             print("\nYour interview ends at {0}".format(your_interview.end))
-            print("\nYour interview will be conducted by {0}".format(your_interview.mentor))
-
-
-# from peewee import *
-# from models import *
-#
-# db.connect()
-#
-#
-# def get_app_info():
-#     ids = []
-#     for applicant in Applicant.select():
-#         ids.append(Applicant.application_code)
-#     app_num = input("Pls give me your app num: ")
-#     if app_num in ids:
-#         print(Applicant.get(app_num == Applicant.application_code)) #need to return all arguments
-#
-#     else:
-#         print('Not a valid application code!')
-#
-# get_app_info()
+            print("\nYour interview will be conducted by {0} {1} at {2}\n".format(
+                your_interview.mentor.first_name,
+                your_interview.mentor.last_name,
+                your_interview.mentor.school.city
+            ))
