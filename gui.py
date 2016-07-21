@@ -26,6 +26,7 @@ class MyFirstGUI:
         self.tables_button.place(x=150, y=290, width=100, height=25)
         self.close_button = Button(self.canvas, text="Close", command=master.quit)
         self.close_button.place(x=150, y=320, width=100, height=25)
+        self.canvas.delete('all')
 
     def show_tables(self):
         self.top = Toplevel(self.master)
@@ -47,7 +48,7 @@ class TableWindow():
             for column in range(len(table[row])):
                 #print(table[row][column])
                 Label(self.master, text = table[row][column]).grid(column=column, row = row)
-
+        #print(Applicant._meta.get_sorted_fields())
 
         # self.quitButton = Button(self.frame, text='Quit', width=25, command=print("yeah"))
         # self.quitButton.pack()
