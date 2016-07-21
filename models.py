@@ -1,9 +1,10 @@
 from peewee import *
+import getpass
 
 # Configure your database connection here
 # database name = should be your username on your laptop
 # database user = should be your username on your laptop
-db = PostgresqlDatabase('handris', user='handris')
+db = PostgresqlDatabase(str(getpass.getuser()), user=str(getpass.getuser()))
 
 
 class BaseModel(Model):

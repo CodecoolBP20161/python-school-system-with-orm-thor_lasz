@@ -130,3 +130,61 @@ class FourthStory():
                 your_interview.mentor.last_name,
                 your_interview.mentor.school.city
             ))
+
+
+class SixthStory():
+    def __init__(self):
+        menu_points = ["by status", "by time", "by location", "by personal data", " by school", " by mentor name"]
+        for point in menu_points:
+            print("{0}.: {1}".format(menu_points.index(point) + 1, point))
+        print("\nPress 'x' to exit\n")
+        # for applicant in Applicant.select():
+        #    print(applicant.interview.mentor)
+        user_input = int(getpass.getpass(prompt=""))
+        if user_input == 1: #status
+            filter_by = "status"
+        elif user_input == 2: #time
+            filter_by = input ("day? yr-mth-day")
+            result = Applicant.select(Applicant.first_name,
+                                            Applicant.last_name,
+                                            Applicant.email,
+                                            Applicant.city) \
+                .join(InterviewSlot, JOIN.FULL, Applicant.interview.start == InterviewSlot.start).where(InterviewSlot.start.year == filter_by)
+        elif user_input == 3: #location
+            filter_by = input ("location? ")
+            result = (Applicant.select(Applicant.first_name,
+                                            Applicant.last_name,
+                                            Applicant.email,
+                                            Applicant.city)\
+                                        .where(Applicant.city == filter_by).tuples())
+        elif user_input == 4: #personal data
+            filter_by = input("email adress? ")
+            result = Applicant.select(Applicant.first_name,
+                                            Applicant.last_name,
+                                            Applicant.email,
+                                            Applicant.city)\
+                                        .where(Applicant.email == filter_by)
+        elif user_input == 5: #school
+            filter_by = input("School? ")
+            result = (Applicant.select(Applicant.first_name,
+                                            Applicant.last_name,
+                                            Applicant.email,
+                                            Applicant.city)\
+                    .join(City, JOIN.FULL, Applicant.city == City.city).where(City.school_city == filter_by).tuples())  #.join(City, Applicant.city == City.city)
+        elif user_input == 6: #mentor
+            filter_by = input("mentor? ")
+            result = Applicant.select(Applicant.first_name,
+                                            Applicant.last_name,
+                                            Applicant.email,
+                                            Applicant.city)\
+                                        .where(Applicant.interview.mentor.first_name == filter_by)
+        print ("\n")
+        print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+        print("\n\n")
+
+
+class SeventhStory():
+
+    def __init__(self):
+        print("Seventh Story: ")
+        print("Here you can check the list of all scheduled interviews.\n")

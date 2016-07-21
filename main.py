@@ -2,6 +2,7 @@ from models import *
 import populator
 from stories import *
 import getpass
+from collections import OrderedDict
 
 
 class MainMenu():
@@ -11,7 +12,12 @@ class MainMenu():
         populator.establish_connection()
         populator.populate_tables()
         self.main_menu = ["Applicant's menu", "Administrator's menu", "Mentor's menu"]
-        self.administrator_menu = ["Story 1: Handle new applications", "Story 2: Assign interview slot to applicants"]
+        self.administrator_menu = [
+            "Story 1: Handle new applications",
+            "Story 2: Assign interview slot to applicants",
+            "Story 6: Application detail",
+            "Story 7: See the list of all scheduled interviews"
+            ]
         self.applicant_menu = ["Story 3: Application details", "Story 4: Interview details"]
 
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
@@ -77,6 +83,10 @@ class MainMenu():
             FirstStory()
         elif user_input == "2":
             SecondStory()
+        elif user_input == "3":
+            SixthStory()
+        elif user_input == "4":
+            SeventhStory()
 
     def mentor(self):
         print("mentor menu")
@@ -88,3 +98,22 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# class Menu():
+#
+#     @staticmethod
+#     def menu_loop():
+#         '''Displays menu.'''
+#         menu = OrderedDict([
+#             ('1', Applicant.show_closest_school)
+#             ('2', Applicant.display_student_status)
+#         ])
+#         choice = None
+#         while choice != 'q':
+#             print("Press 'q' to exit menu")
+#             for key, value in menu.items():
+#                 print("{}) {}".format(key, value.__doc__))
+#             choice = input("Choice: ").lower().strip()
+#
+#             if choice in menu:
+#                 menu[choice]()
