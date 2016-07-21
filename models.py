@@ -44,3 +44,4 @@ class Applicant(BaseModel):
     application_code = CharField(null=True)
     school = ForeignKeyField(School, related_name='applicant', null=True)
     interview = ForeignKeyField(InterviewSlot, null=True)
+    status = CharField(null=True) 
