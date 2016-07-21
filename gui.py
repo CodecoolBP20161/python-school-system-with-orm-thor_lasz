@@ -3,6 +3,8 @@ import populator
 from models import *
 from stories import *
 from tabulate import tabulate
+from tkinter.ttk import *
+from tkinter import ttk
 
 class MyFirstGUI:
     def __init__(self, master):
@@ -35,64 +37,49 @@ class MyFirstGUI:
 class TableWindow():
     def __init__(self, master):
         self.master = master
+        n = ttk.Notebook(self.master)
+        f1 = ttk.Frame(n)   # first page, which would get widgets gridded into it
+        f2 = ttk.Frame(n)   # second page
+        f3 = ttk.Frame(n)   # second page
+        f4 = ttk.Frame(n)   # second page
+        f5 = ttk.Frame(n)   # second page
+        n.add(f1, text='Applicant')
+        n.add(f2, text='City')
+        n.add(f3, text='Mentor')
+        n.add(f4, text='InterviewSlot')
+        n.add(f5, text='School')
 
+        n.pack()
         populator.establish_connection()
         populator.populate_tables()
-        table = (Applicant.select(
-                                            Applicant.first_name,
-                                            Applicant.last_name,
-                                            Applicant.email,
-                                            Applicant.city
-                                        ).tuples())
+
+        table = Applicant.select().tuples()
+        self.table_filler(table, f1)
+        table = City.select().tuples()
+        self.table_filler(table, f2)
+        table = Mentor.select().tuples()
+        self.table_filler(table, f3)
+        table = InterviewSlot.select().tuples()
+        self.table_filler(table, f4)
+        table = School.select().tuples()
+        self.table_filler(table, f5)
+
+
+    def table_filler(self, table, parent):
         for row in range(len(table)):
             for column in range(len(table[row])):
-                #print(table[row][column])
-                Label(self.master, text = table[row][column]).grid(column=column, row = row)
-        #print(Applicant._meta.get_sorted_fields())
-
-        # self.quitButton = Button(self.frame, text='Quit', width=25, command=print("yeah"))
-        # self.quitButton.pack()
-        # self.frame.pack()
-        # top.button = Button(text = "We're fckn genious", width= 100, height= 50, command=top.quit)
-        # top.button.pack()
-        # self.close_button = Button(self.top, text="Close", command=master.quit)
-        # self.close_button.pack()
+                Label(parent, text=table[row][column]).grid(column=column, row=row)
 
 
-
-
-
-
-    #
-    #     self.master = master
-    #     self.master.geometry('400x400')
-    #     self.frame = Frame(self.master)
-    #     self.frame.place( x=0, y=0, width= 400, height= 400)
-    #     master.title("A simple GUI")
-    #     self.canvas = Canvas(self.frame, width= 400, height= 400, bg = 'white')
-    #     self.canvas.pack()
-    #     self.canvas.create_image(280, 0, anchor=NE, image = self.logo)
-    #     self.label = Label(self.canvas, text="Welcome to CodeCool application system!")
-    #     self.label.pack()   #elhelyezés
-    #     self.admin_button = Button(self.canvas, text="Administrator", command=lambda: self.adminmenu())
-    #     self.admin_button.place(x=180, y=300, width= 40, height = 20)
-    #     self.applicant_button = Button(self.canvas, text="Applicant", command=lambda: self.applicantmenu())
-    #     self.applicant_button.pack()
-    #     self.mentor_button = Button(self.canvas, text="Mentor", command=lambda: self.mentormenu())
-    #     self.mentor_button.pack()
-    #     self.close_button = Button(self.canvas, text="Close", command=master.quit)
-    #     self.close_button.pack()
-    #
-    # def adminmenu(self):
-    #     print("Adminmenu")
-    #
-    # def applicantmenu(self):
-    #     print("Applicantmenu")
-    #
-    # def mentormenu(self):
-    #     print("mentormenu")
 
 
 root = Tk()
 my_gui = MyFirstGUI(root)
 root.mainloop()
+        #
+        # table = (Applicant.select(
+        #                                     Applicant.first_name,
+        #                                     Applicant.last_name,
+        #                                     Applicant.email,
+        #                                     Applicant.city
+        #                                 ).tuples())
