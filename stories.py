@@ -83,6 +83,21 @@ class SecondStory():
             print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code", "Interview starts at"]))
             print("\n")
 
+class ThirdStory():
+
+    def __init__(self):
+
+        ids = []
+        for applicant in Applicant.select():
+            ids.append(Applicant.application_code)
+        app_num = input("Please give me your application number: ")
+        if app_num in ids:
+            print(Applicant.get(app_num == Applicant.application_code)) #need to return all arguments
+
+        else:
+            print('Not a valid application code!')
+
+
 
 class FourthStory():
 
