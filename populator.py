@@ -6,7 +6,7 @@ from random import randint
 
 
 def id_generator(ids):
-    # THIS NEEDS TO BE REPLACED!!!!!
+    """ Generates a six digit id which is unique to the given in list of strings. """
     id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
     while id in ids:
         id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
@@ -66,16 +66,26 @@ def example_data():
     ]
 
     applicants = [
-        {"first_name": "Jack", "last_name": "Johnson", "email": "jackjohnson@gmail.com", "city": "Érd", "application_code": "GFJEDF"},
-        {"first_name": "John", "last_name": "Jackson", "email": "johnjackson@gmail.com", "city": "Kiskunbüdösbütykös", "application_code": None},
-        {"first_name": "Amy", "last_name": "Wong", "email": "awong79@marslink.web", "city": "Mars", "application_code": None},
-        {"first_name": "Bender", "last_name": "Rodriguez", "email": "bender@ilovebender.com", "city": "Tijuana", "application_code": None},
-        {"first_name": "John", "last_name": "Zoidberg", "email": "zoidberg@decapodians.deca", "city": "Decapod 10", "application_code": None},
-        {"first_name": "Kif", "last_name": "Kroker", "email": "iamgreen@military.earth", "city": "Nimbus", "application_code": None},
-        {"first_name": "Zapp", "last_name": "Brannigan", "email": "lovethezapper@military.earth", "city": "Nimbus", "application_code": None},
-        {"first_name": "Hermes", "last_name": "Conrad", "email": "bureaucrat_conrad@gmail.com", "city": "New New York", "application_code": None},
-        {"first_name": "Antonio", "last_name": "Calculon", "email": "allmycircuits@gmail.com", "city": "New New York", "application_code": None},
-        {"first_name": "Philip", "last_name": "Fry", "email": "iloveleela@gmail.com", "city": "New New York", "application_code": None}
+        {"first_name": "Jack", "last_name": "Johnson", "email": "jackjohnson@gmail.com",
+            "city": "Érd", "application_code": "GFJEDF"},
+        {"first_name": "John", "last_name": "Jackson", "email": "johnjackson@gmail.com",
+            "city": "Kiskunbüdösbütykös", "application_code": None},
+        {"first_name": "Amy", "last_name": "Wong", "email": "awong79@marslink.web",
+            "city": "Mars", "application_code": None},
+        {"first_name": "Bender", "last_name": "Rodriguez", "email": "bender@ilovebender.com",
+            "city": "Tijuana", "application_code": None},
+        {"first_name": "John", "last_name": "Zoidberg", "email": "zoidberg@decapodians.deca",
+            "city": "Decapod 10", "application_code": None},
+        {"first_name": "Kif", "last_name": "Kroker", "email": "iamgreen@military.earth",
+            "city": "Nimbus", "application_code": None},
+        {"first_name": "Zapp", "last_name": "Brannigan", "email": "lovethezapper@military.earth",
+            "city": "Nimbus", "application_code": None},
+        {"first_name": "Hermes", "last_name": "Conrad", "email": "bureaucrat_conrad@gmail.com",
+            "city": "New New York", "application_code": None},
+        {"first_name": "Antonio", "last_name": "Calculon", "email": "allmycircuits@gmail.com",
+            "city": "New New York", "application_code": None},
+        {"first_name": "Philip", "last_name": "Fry", "email": "iloveleela@gmail.com", "city":
+            "New New York", "application_code": None}
     ]
 
     bp = School.create(city="Budapest")

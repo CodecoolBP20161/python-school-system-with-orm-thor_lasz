@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 
 class MainMenu():
+    """ Initiates the main menu in the terminal. """
     state = "main"
 
     def __init__(self):
@@ -16,7 +17,6 @@ class MainMenu():
             "Story 1: Handle new applications",
             "Story 2: Assign interview slot to applicants",
             "Story 6: Application detail",
-            "Story 7: See the list of all scheduled interviews"
             ]
         self.applicant_menu = ["Story 3: Application details", "Story 4: Interview details"]
 
@@ -34,6 +34,7 @@ class MainMenu():
                 self.mentor()
 
     def call_main_menu(self):
+        """ The main menu, where one can choose from applicant, administrator and mentor submenus. """
         while True:
             for point in self.main_menu:
                 print("{0}.: {1}".format(self.main_menu.index(point)+1, point))
@@ -53,6 +54,7 @@ class MainMenu():
                 self.state = "mentor"
 
     def applicant(self):
+        """ The applicant view submenu. """
         for point in self.applicant_menu:
             print("{0}.: {1}".format(self.applicant_menu.index(point)+1, point))
         print("\nPress 'x' to exit\n")
@@ -68,9 +70,8 @@ class MainMenu():
         elif user_input == "2":
             FourthStory()
 
-
-
     def administrator(self):
+        """ The administrator view submenu. """
         for point in self.administrator_menu:
             print("{0}.: {1}".format(self.administrator_menu.index(point)+1, point))
         print("\nPress 'x' to exit\n")
@@ -85,11 +86,10 @@ class MainMenu():
             SecondStory()
         elif user_input == "3":
             SixthStory()
-        elif user_input == "4":
-            SeventhStory()
 
     def mentor(self):
-        print("mentor menu")
+        """ The mento view submenu. """
+        print("Sorry buddy, nothing to do here. Press any key to return to the main menu.")
         user_input = getpass.getpass(prompt="")
 
 
@@ -98,22 +98,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# class Menu():
-#
-#     @staticmethod
-#     def menu_loop():
-#         '''Displays menu.'''
-#         menu = OrderedDict([
-#             ('1', Applicant.show_closest_school)
-#             ('2', Applicant.display_student_status)
-#         ])
-#         choice = None
-#         while choice != 'q':
-#             print("Press 'q' to exit menu")
-#             for key, value in menu.items():
-#                 print("{}) {}".format(key, value.__doc__))
-#             choice = input("Choice: ").lower().strip()
-#
-#             if choice in menu:
-#                 menu[choice]()
