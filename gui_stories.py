@@ -8,8 +8,7 @@ import getpass
 class FirstStory():
 
     def __init__(self):
-        self.text = ["Here you can automate the process of incoming applications.",
-                     "These are the applicants without an assigned id or school in the database:"]
+        pass
 
 
     def new_applicants(self):
@@ -46,49 +45,44 @@ class FirstStory():
 class SecondStory():
 
     def __init__(self):
-        print("Second Story: ")
-        print("Here you can assign interview slots to applicants.\n")
+        pass
+
+    def new_applicants(self):
 
         no_interview = Applicant.select().where(Applicant.interview >> None)
-
         applicants_without_interview = (Applicant.select(
-                                            Applicant.first_name,
-                                            Applicant.last_name,
-                                            Applicant.email,
-                                            Applicant.city
-                                        )
+            Applicant.first_name,
+            Applicant.last_name,
+            Applicant.email,
+            Applicant.city
+        )
                                         .where(Applicant.interview >> None).tuples())
-        print("There are {0} applicants without interview in the database.\n".format(len(no_interview)))
-        print("The list of these applicants: \n")
-        print(tabulate(applicants_without_interview, headers=["First name", "Last name", "Email", "City"]))
-        print("\nPress x to quit, press any other key to assign an interview slot to these applicants.\n")
-        user_input = getpass.getpass(prompt="")
-        if user_input == "x":
-            return
-        else:
-            updated_applicants = []
-            for applicant in Applicant.select().where(Applicant.interview >> None):
-                interview = InterviewSlot.select().where(
-                    InterviewSlot.reserved >> False,
-                    InterviewSlot.mentor_id == applicant.school_id
-                ).order_by(fn.Random()).limit(1)[0]
-                interview.reserved = True
-                interview.save()
-                applicant.interview = interview
-                applicant.save()
-                updated_applicants.append(
-                    [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
-                )
-            print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
-            print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code",
-                                                        "Interview starts at"]))
-            print("\n")
+
+        return applicants_without_interview
+
+    def add_interview(self):
+
+        updated_applicants = []
+        for applicant in Applicant.select().where(Applicant.interview >> None):
+            interview = InterviewSlot.select().where(
+                InterviewSlot.reserved >> False,
+                InterviewSlot.mentor_id == applicant.school_id
+            ).order_by(fn.Random()).limit(1)[0]
+            interview.reserved = True
+            interview.save()
+            applicant.interview = interview
+            applicant.save()
+            updated_applicants.append(
+                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
+            )
+        return updated_applicants
+
 
 
 class ThirdStory():
 
     def __init__(self):
-        print("SThird Story: ")
+        print("Third Story: ")
         print("Here you can the details of your application.\n")
 
         ids = []

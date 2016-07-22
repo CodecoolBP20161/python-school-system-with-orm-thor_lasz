@@ -83,6 +83,9 @@ class MyFirstGUI:
         self.top = Toplevel(self.master)
         self.first_window = FirstWindow(self.top)
 
+    def second(self):
+        self.top = Toplevel(self.master)
+        self.second_window = SecondWindow(self.top)
 
     def show_tables(self):
         self.top = Toplevel(self.master)
@@ -116,7 +119,10 @@ class FirstWindow():
     def update_id(self):
         self.head.destroy()
         self.upperside.destroy()
+        #self.update_button.destroy()
         self.downside.destroy()
+        self.downside = Canvas(self.master, width=700, height=150)
+        self.downside.place(x=0, y=250)
         self.head = Canvas(self.master, width=700, height=80)
         self.head.place(x=0, y=0)
         self.head.create_text(350, 40, text="Updated application informations:")
@@ -127,9 +133,51 @@ class FirstWindow():
         for row in range(len(table)):
             for column in range(len(table[row])):
                 Label(self.upperside, text=table[row][column]).grid(column=column, row=row, padx=30)
-        self.update_button = Button(self.downside, text="Create ID", command=lambda: self.update_id())
-        self.update_button.place(x=245, y=30, width=100, height=25)
+        # self.close_button = Button(self.downside, text="Close table", command=lambda: self.first_window.destroy())
+        # self.close_button.place(x=245, y=30, width=100, height=25)
 
+
+class SecondWindow():
+    def __init__(self, master):
+        self.master = master
+        master.geometry("700x400")
+        master.title("Second user story")
+        self.head = Canvas(self.master, width=700, height=80)
+        self.head.place(x=0, y=0)
+        self.head.create_text(350, 15, text="Here you can assign interview slots to applicants.")
+        self.head.create_text(350, 60,
+                              text="These are the applicants without interview in the database:")
+        self.upperside = Canvas(self.master, width=700, height=170)
+        self.upperside.place(x=0, y=81)
+
+        table = SecondStory.new_applicants(self)
+        for row in range(len(table)):
+            for column in range(len(table[row])):
+                Label(self.upperside, text=table[row][column]).grid(column=column, row=row, padx=30)
+        self.downside = Canvas(self.master, width=700, height=150)
+        self.downside.place(x=0, y=250)
+        self.update_button = Button(self.downside, text="Create interview slot", command=lambda: self.update_iw())
+        self.update_button.place(x=245, y=30, width=100, height=25)
+        # self.close_button = Button(self.downside, text="Close", command=self.master.quit)
+        # self.close_button.place(x=355, y=30, width=100, height=25)
+
+    def update_iw(self):
+        self.head.destroy()
+        self.upperside.destroy()
+        # self.update_button.destroy()
+        self.downside.destroy()
+        self.downside = Canvas(self.master, width=700, height=150)
+        self.downside.place(x=0, y=250)
+        self.head = Canvas(self.master, width=700, height=80)
+        self.head.place(x=0, y=0)
+        self.head.create_text(350, 40, text="Updated application informations:")
+
+        self.upperside = Canvas(self.master, width=500, height=170)
+        self.upperside.place(x=120, y=81)
+        table = SecondStory.add_interview(self)
+        for row in range(len(table)):
+            for column in range(len(table[row])):
+                Label(self.upperside, text=table[row][column]).grid(column=column, row=row, padx=30)
 
 
 class TableWindow():
