@@ -1,6 +1,6 @@
 # Codecool Application System
 #### We have implemented the following stories:
-![Alt text](./readme_pic.png?raw=true "")
+![User stories](http://i.imgur.com/MPOGuSC.png)
 ##### First story:
 * As an Administrator, I want to automate the process of incoming applications, so that I can save some time (of manual work).
 
