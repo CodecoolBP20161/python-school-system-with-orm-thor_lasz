@@ -12,13 +12,21 @@ class MainMenu():
     def __init__(self):
         populator.establish_connection()
         populator.populate_tables()
-        self.main_menu = ["Applicant's menu", "Administrator's menu", "Mentor's menu"]
+
+        self.main_menu = [
+            "Applicant's menu",
+            "Administrator's menu",
+            "Mentor's menu"
+            ]
         self.administrator_menu = [
             "Story 1: Handle new applications",
             "Story 2: Assign interview slot to applicants",
             "Story 6: Application detail",
             ]
-        self.applicant_menu = ["Story 3: Application details", "Story 4: Interview details"]
+        self.applicant_menu = [
+            "Story 3: Application details",
+            "Story 4: Interview details"
+            ]
 
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
         print("\nPlease choose from the following options:\n")
@@ -98,3 +106,22 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# class Menu():
+#
+#     @staticmethod
+#     def menu_loop():
+#         '''Displays menu.'''
+#         menu = OrderedDict([
+#             ('1', Applicant.show_closest_school)
+#             ('2', Applicant.display_student_status)
+#         ])
+#         choice = None
+#         while choice != 'q':
+#             print("Press 'q' to exit menu")
+#             for key, value in menu.items():
+#                 print("{}) {}".format(key, value.__doc__))
+#             choice = input("Choice: ").lower().strip()
+#
+#             if choice in menu:
+#                 menu[choice]()
