@@ -82,49 +82,45 @@ class SecondStory():
 class ThirdStory():
 
     def __init__(self):
-        print("Third Story: ")
-        print("Here you can the details of your application.\n")
+        pass
 
+    def search(self, app_num):
         ids = []
         for applicant in Applicant.select():
             ids.append(applicant.application_code)
-        app_num = input("Please give me your application number: ")
         if app_num in ids:
             Applicant_objekt = Applicant.get(app_num == Applicant.application_code)
-            print("\n")
-            print('First name: ', Applicant_objekt.first_name)
-            print('Last name: ', Applicant_objekt.last_name)
-            print('Email: ', Applicant_objekt.email)
-            print('City: ', Applicant_objekt.city)
-            print('Application code: ', Applicant_objekt.application_code)
-            print('School: ', Applicant_objekt.school)
-            print('Status: ', Applicant_objekt.status)
-            print("\n")
+            result = [["First name: ", Applicant_objekt.first_name + Applicant_objekt.last_name], ["Email adress:", Applicant_objekt.email],
+                      ["City: ", Applicant_objekt.city], ["Application code: ", Applicant_objekt.application_code],
+                      ["School:", Applicant_objekt.school], ["Status:", Applicant_objekt.status]]
+            return result
         else:
-            print('Not a valid application code!')
+            return ("Invalid application code")
 
 
 class FourthStory():
 
     def __init__(self):
-        print("Fourth Story: ")
-        print("Here you can check the details of you interview.\n")
+        pass
 
+    def search(self, current_application_code):
         application_codes = []
         for applicant in Applicant.select():
             application_codes.append(applicant.application_code)
 
-        current_application_code = input("Please give in your application code: ")
+
         if current_application_code in application_codes:
             your_interview = Applicant.get(current_application_code == Applicant.application_code).interview
-
-            print("\nYour interview starts at {0}".format(your_interview.start))
-            print("\nYour interview ends at {0}".format(your_interview.end))
-            print("\nYour interview will be conducted by {0} {1} at {2}\n".format(
-                your_interview.mentor.first_name,
-                your_interview.mentor.last_name,
-                your_interview.mentor.school.city
-            ))
+            print (current_application_code)
+            print (your_interview)
+            result =[["Your interview starts at", your_interview.start],["Your interview ends at", your_interview.end]]
+            # print("\nYour interview will be conducted by {0} {1} at {2}\n".format(
+            #     your_interview.mentor.first_name,
+            #     your_interview.mentor.last_name,
+            #     your_interview.mentor.school.city
+            # ))
+        print (result)
+        return result
 
 
 class SixthStory():
