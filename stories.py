@@ -92,26 +92,31 @@ class SecondStory():
 class ThirdStory():
 
     def __init__(self):
-        print("SThird Story: ")
+        print("Third Story: ")
         print("Here you can the details of your application.\n")
-
         ids = []
         for applicant in Applicant.select():
             ids.append(applicant.application_code)
         app_num = input("Please give me your application number: ")
         if app_num in ids:
-            Applicant_objekt = Applicant.get(app_num == Applicant.application_code)
+            result = Applicant.select(
+                Applicant.first_name,
+                Applicant.last_name,
+                Applicant.email,
+                Applicant.city,
+                Applicant.application_code,
+                Applicant.school,
+                Applicant.status
+                ).where(Applicant.application_code == app_num).tuples()
             print("\n")
-            print('First name: ', Applicant_objekt.first_name)
-            print('Last name: ', Applicant_objekt.last_name)
-            print('Email: ', Applicant_objekt.email)
-            print('City: ', Applicant_objekt.city)
-            print('Application code: ', Applicant_objekt.application_code)
-            print('School: ', Applicant_objekt.school)
-            print('Status: ', Applicant_objekt.status)
+            print(tabulate(result, headers=[
+                    "First name", "Last name", "Email", "City",
+                    "Application code", "School", "Status"
+                ]))
             print("\n")
         else:
             print('Not a valid application code!')
+            print("\n")
 
 
 class FourthStory():
@@ -143,61 +148,87 @@ class SixthStory():
         print("Here you can the list of all applicants.\n")
 
         menu_points = ["By status", "By time", "By location", "By personal data", " By school", " By mentor name"]
-        for point in menu_points:
-            print("{0}.: {1}".format(menu_points.index(point) + 1, point))
-        print("\nPress 'x' to exit\n")
+        # for point in menu_points:
+        #     print("{0}.: {1}".format(menu_points.index(point) + 1, point))
 
-        user_input = int(getpass.getpass(prompt=""))
+        user_input = ""
+        while user_input != "x":
+            for point in menu_points:
+                print("{0}.: {1}".format(menu_points.index(point) + 1, point))
+            print("\nPress 'x' to exit\n")
 
-        if user_input == 1:
-            filter_by = input("Give in the status: ")
-            result = (Applicant.select(Applicant.first_name,
-                                       Applicant.last_name,
-                                       Applicant.email,
-                                       Applicant.city)
-                      .where(Applicant.status == filter_by).tuples())
+            user_input = int(getpass.getpass(prompt=""))
 
-        elif user_input == 2:
-            date_input = str(input('Give in the date:  '))
-            filter_by = datetime.strptime(date_input, '%Y-%m-%d')
-            result = []
-            for applicant in Applicant.select():
-                if filter_by < applicant.interview.start:
-                    result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
+            if user_input == 1:
+                filter_by = input("Give in the status: ")
+                result = (Applicant.select(Applicant.first_name,
+                                           Applicant.last_name,
+                                           Applicant.email,
+                                           Applicant.city,
+                                           Applicant.status)
+                          .where(Applicant.status == filter_by).tuples())
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+                print("\n\n")
 
-        elif user_input == 3:
-            filter_by = input("Give in the location: ")
-            result = Applicant.select(
-                Applicant.first_name,
-                Applicant.last_name,
-                Applicant.email,
-                Applicant.city
-                ).where(Applicant.city == filter_by).tuples()
+            elif user_input == 2:
+                date_input = str(input('Give in the date:  '))
+                filter_by = datetime.strptime(date_input, '%Y-%m-%d')
+                result = []
+                for applicant in Applicant.select():
+                    if filter_by < applicant.interview.start:
+                        result.append(
+                            [applicant.first_name, applicant.last_name, applicant.email,
+                                applicant.city, applicant.interview.start]
+                        )
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City", "Interview starts at"]))
+                print("\n\n")
 
-        elif user_input == 4:
-            filter_by = input("Give in the email address: ")
-            result = Applicant.select(
-                Applicant.first_name,
-                Applicant.last_name,
-                Applicant.email,
-                Applicant.city
-                ).where(Applicant.email == filter_by).tuples()
+            elif user_input == 3:
+                filter_by = input("Give in the location: ")
+                result = Applicant.select(
+                    Applicant.first_name,
+                    Applicant.last_name,
+                    Applicant.email,
+                    Applicant.city
+                    ).where(Applicant.city == filter_by).tuples()
 
-        elif user_input == 5:
-            filter_by = input("Give in the school ")
-            result = Applicant.select(
-                Applicant.first_name,
-                Applicant.last_name,
-                Applicant.email,
-                Applicant.city
-                ).join(City, JOIN.FULL, Applicant.city == City.city.where(City.school_city == filter_by).tuples())
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+                print("\n\n")
 
-        elif user_input == 6:
-            filter_by = input("Give in the mentor: ")
-            result = []
-            for applicant in Applicant.select():
-                if filter_by == applicant.interview.mentor.first_name:
-                    result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
-        print ("\n")
-        print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
-        print("\n\n")
+            elif user_input == 4:
+                filter_by = input("Give in the email address: ")
+                result = Applicant.select(
+                    Applicant.first_name,
+                    Applicant.last_name,
+                    Applicant.email,
+                    Applicant.city
+                    ).where(Applicant.email % str("%"+filter_by+"%")).tuples()
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+                print("\n\n")
+
+            elif user_input == 5:
+                filter_by = input("Give in the school ")
+                result = Applicant.select(
+                    Applicant.first_name,
+                    Applicant.last_name,
+                    Applicant.email,
+                    Applicant.city
+                    ).join(City, JOIN.FULL, Applicant.city == City.city.where(City.school_city == filter_by).tuples())
+
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+                print("\n\n")
+
+            elif user_input == 6:
+                filter_by = input("Give in the mentor: ")
+                result = []
+                for applicant in Applicant.select():
+                    if filter_by == applicant.interview.mentor.first_name:
+                        result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
+                print ("\n")
+                print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
+                print("\n\n")
