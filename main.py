@@ -18,15 +18,17 @@ class MainMenu():
             "Administrator's menu",
             "Mentor's menu"
             ]
-        self.administrator_menu = [
-            "Story 1: Handle new applications",
-            "Story 2: Assign interview slot to applicants",
-            "Story 6: Application detail",
-            ]
-        self.applicant_menu = [
-            "Story 3: Application details",
-            "Story 4: Interview details"
-            ]
+
+        self.administrator_menu = OrderedDict([
+            ("1", ("Story 1: Handle new applications", FirstStory)),
+            ("2", ("Story 2: Assign interview slot to applicants", SecondStory)),
+            ("3", ("Story 6: Application detail", SixthStory))
+        ])
+
+        self.applicant_menu = OrderedDict([
+            ("1", ("Story 3: Application details", ThirdStory)),
+            ("2", ("Story 4: Interview Details", FourthStory))
+        ])
 
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
         print("\nPlease choose from the following options:\n")
@@ -63,37 +65,33 @@ class MainMenu():
 
     def applicant(self):
         """ The applicant view submenu. """
-        for point in self.applicant_menu:
-            print("{0}.: {1}".format(self.applicant_menu.index(point)+1, point))
-        print("\nPress 'x' to exit\n")
-        user_input = getpass.getpass(prompt="")
+        
+        user_input = None
+        while user_input != "x":
+            for key, value in self.applicant_menu.items():
+                print("{}) {}".format(key, value[0]))
+            print("\nPress 'x' to exit\n")
 
-        if user_input == "x":
-            self.state = "main"
-            return
-
-        elif user_input == "1":
-            ThirdStory()
-
-        elif user_input == "2":
-            FourthStory()
+            user_input = getpass.getpass(prompt="").lower().strip()
+            print(user_input)
+            if user_input in self.applicant_menu:
+                self.applicant_menu[user_input][1]()
+                user_input = "x"
+        self.state = "main"
 
     def administrator(self):
         """ The administrator view submenu. """
-        for point in self.administrator_menu:
-            print("{0}.: {1}".format(self.administrator_menu.index(point)+1, point))
-        print("\nPress 'x' to exit\n")
-        user_input = getpass.getpass(prompt="")
 
-        if user_input == "x":
-            self.state = "main"
-            return
-        elif user_input == "1":
-            FirstStory()
-        elif user_input == "2":
-            SecondStory()
-        elif user_input == "3":
-            SixthStory()
+        user_input = None
+        while user_input != "x":
+            for key, value in self.administrator_menu.items():
+                print("{}) {}".format(key, value[0]))
+            print("\nPress 'x' to exit\n")
+
+            user_input = getpass.getpass(prompt="")
+            if user_input in self.administrator_menu:
+                self.administrator_menu[user_input][1]()
+        self.state = "main"
 
     def mentor(self):
         """ The mento view submenu. """
@@ -106,22 +104,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# class Menu():
-#
-#     @staticmethod
-#     def menu_loop():
-#         '''Displays menu.'''
-#         menu = OrderedDict([
-#             ('1', Applicant.show_closest_school)
-#             ('2', Applicant.display_student_status)
-#         ])
-#         choice = None
-#         while choice != 'q':
-#             print("Press 'q' to exit menu")
-#             for key, value in menu.items():
-#                 print("{}) {}".format(key, value.__doc__))
-#             choice = input("Choice: ").lower().strip()
-#
-#             if choice in menu:
-#                 menu[choice]()
