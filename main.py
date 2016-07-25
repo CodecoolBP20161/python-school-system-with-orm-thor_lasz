@@ -1,5 +1,5 @@
 from models import *
-import populator
+from populator import Populator
 from stories import *
 import getpass
 from collections import OrderedDict
@@ -10,8 +10,8 @@ class MainMenu():
     state = "main"
 
     def __init__(self):
-        populator.establish_connection()
-        populator.populate_tables()
+        Populator.establish_connection()
+        Populator.populate_tables()
 
         self.main_menu = [
             "Applicant's menu",
@@ -65,7 +65,7 @@ class MainMenu():
 
     def applicant(self):
         """ The applicant view submenu. """
-        
+
         user_input = None
         while user_input != "x":
             for key, value in self.applicant_menu.items():
