@@ -1,19 +1,9 @@
-import random
-import string
 from models import *
 from datetime import *
 from random import randint
 
 
 class Populator():
-
-    @staticmethod
-    def id_generator(ids):
-        """ Generates a six digit id which is unique to the given in list of strings. """
-        id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
-        while id in ids:
-            id = (''.join(random.choice(string.ascii_uppercase + string.digits) for i in range(6)))
-        return id
 
     @staticmethod
     def establish_connection():

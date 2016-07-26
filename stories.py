@@ -1,8 +1,12 @@
 from models import *
-import populator
+from populator import Populator
 from tabulate import tabulate
 from datetime import datetime
 import getpass
+
+
+class StoryHandler():
+    pass
 
 
 class FirstStory():
@@ -10,39 +14,26 @@ class FirstStory():
     def __init__(self):
         print("First story: ")
         print("Here you can automate the process of incoming applications.\n")
-        ids = []
-        for applicant in Applicant.select():
-            ids.append(applicant.application_code)
-        print("There are {0} applicants without an assigned id or school in the database.\n".format(len(ids)))
+
+        app_codes = Applicant.get_application_codes()
+        print("There are {0} applicants without an assigned id or school in the database.\n".format(len(app_codes)))
         print("The list of these applicants: \n")
 
-        updateable_applicants = (Applicant.select(
-                                    Applicant.first_name,
-                                    Applicant.last_name,
-                                    Applicant.email,
-                                    Applicant.city
-                                 )
-                                 .where(Applicant.application_code >> None).tuples())
-
+        updateable_applicants = Applicant.get_applicants_without_code()
         print(tabulate(updateable_applicants, headers=["First name", "Last name", "Email", "City"]))
+
         print("\nPress x to quit, press any other key to assign a school and a unique id to these applicants.\n")
+
         user_input = getpass.getpass(prompt="")
+
         if user_input == "x":
             return
         else:
-            updated_applicants = []
-            for applicant in Applicant.select().where(Applicant.application_code >> None):
-                applicant.application_code = populator.id_generator(ids)
-                applicant.save()
+            Applicant.assign_school()
+            updated_applicants = Applicant.assign_application_code()
 
-            for applicant in Applicant.select().where(Applicant.school >> None):
-                varos = City.get(City.city == applicant.city).school_city
-                applicant.school = School.get(School.city == varos).id
-                applicant.save()
-                updated_applicants.append(
-                    [applicant.first_name, applicant.last_name, applicant.application_code, applicant.school.city]
-                )
-        print("The following {0} applicants have been assigned an id and a school in the database.\n".format(len(ids)))
+        print("The following {0} applicants have been assigned an id and a school"
+              "in the database.\n".format(len(app_codes)))
         print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code", "School"]))
         print("\n")
 
