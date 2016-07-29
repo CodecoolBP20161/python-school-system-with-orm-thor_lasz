@@ -16,6 +16,7 @@ class FirstStory():
         print("Here you can automate the process of incoming applications.\n")
 
         app_codes = Applicant.get_application_codes()
+        print(app_codes)
         print("There are {0} applicants without an assigned id or school in the database.\n".format(len(app_codes)))
         print("The list of these applicants: \n")
 
