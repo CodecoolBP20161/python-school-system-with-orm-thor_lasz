@@ -58,10 +58,14 @@ class TableWindow():
 
     def send_sql_query(self):
         message = self.sql_query_entry.get()
-        # print(message.split()[-1]._meta.sorted_field_names)
-        # get all tables és a listából ami megfelel neki az utolsó szó alapján
-        # select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='applicant'
-        headers = Populator.run_sql("select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='applicant'")
+        table_name = message.split()[message.split().index("from")+1]
+
+        if message.split()[message.split().index("select")+1] == "*":
+            query = "select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='" + table_name + "'"
+            headers = Populator.run_sql(query)
+        else:
+            headers = message.split()[message.split().index("select")+1:message.split().index("from")]
+
         self.text.config(state=NORMAL)
         self.text.delete(1.0, END)
         self.text.insert(END, tabulate(Populator.run_sql(message), headers=headers))
