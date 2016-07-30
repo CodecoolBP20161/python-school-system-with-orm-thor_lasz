@@ -1,6 +1,7 @@
 from tkinter import *
 from populator import Populator
 from models import *
+from tabulate import tabulate
 
 
 class TableWindow():
@@ -43,19 +44,27 @@ class TableWindow():
 
         frame = Frame(parent)
         frame.grid(row=2, column=0, columnspan=3, sticky=W+E+N+S)
-        scrollbar = Scrollbar(frame)
-        self.text = Text(frame)
-        scrollbar.pack(side=RIGHT, fill=Y, )
+        scrollbary = Scrollbar(frame)
+        scrollbarx = Scrollbar(frame)
+        self.text = Text(frame, wrap=NONE)
+        scrollbary.pack(side=RIGHT, fill=Y)
+        scrollbarx.pack(side=BOTTOM, fill=X)
         self.text.pack(side=LEFT, fill=BOTH, expand=1)
-        scrollbar.config(command=self.text.yview)
-        self.text.config(yscrollcommand=scrollbar.set)
+        scrollbary.config(command=self.text.yview)
+        scrollbarx.config(orient=HORIZONTAL, command=self.text.xview)
+        self.text.config(yscrollcommand=scrollbary.set)
+        self.text.config(xscrollcommand=scrollbarx.set)
         self.text.config(state=DISABLED)
 
     def send_sql_query(self):
         message = self.sql_query_entry.get()
+        # print(message.split()[-1]._meta.sorted_field_names)
+        # get all tables és a listából ami megfelel neki az utolsó szó alapján
+        # select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='applicant'
+        headers = Populator.run_sql("select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='applicant'")
         self.text.config(state=NORMAL)
         self.text.delete(1.0, END)
-        self.text.insert(END, Populator.run_sql(message))
+        self.text.insert(END, tabulate(Populator.run_sql(message), headers=headers))
         self.text.config(state=DISABLED)
 
     def table_filler(self, table, parent, header):
