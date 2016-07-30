@@ -16,8 +16,8 @@ class FirstStory():
         print("Here you can automate the process of incoming applications.\n")
 
         app_codes = Applicant.get_application_codes()
-        print(app_codes)
-        print("There are {0} applicants without an assigned id or school in the database.\n".format(len(app_codes)))
+        no_app_code = app_codes.count(None)
+        print("There are {0} applicants without an assigned id or school in the database.\n".format(no_app_code))
         print("The list of these applicants: \n")
 
         updateable_applicants = Applicant.get_applicants_without_code()
@@ -34,7 +34,7 @@ class FirstStory():
             updated_applicants = Applicant.assign_application_code()
 
         print("The following {0} applicants have been assigned an id and a school"
-              "in the database.\n".format(len(app_codes)))
+              "in the database.\n".format(len(updated_applicants)))
         print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code", "School"]))
         print("\n")
 
