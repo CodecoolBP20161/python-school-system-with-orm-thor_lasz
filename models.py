@@ -70,7 +70,17 @@ class Applicant(BaseModel):
                 Applicant.last_name,
                 Applicant.email,
                 Applicant.city
-             ).where(Applicant.application_code >> None).tuples()
+        ).where(Applicant.application_code >> None).tuples()
+
+    @staticmethod
+    def get_applicants_without_interview():
+        """ Returns those applicants who do not have an interview slot reserved. """
+        return Applicant.select(
+            Applicant.first_name,
+            Applicant.last_name,
+            Applicant.email,
+            Applicant.city
+        ).where(Applicant.interview >> None).tuples()
 
     @classmethod
     def application_code_generator(cls):
@@ -82,6 +92,7 @@ class Applicant(BaseModel):
 
     @classmethod
     def assign_application_code(cls):
+        """ Assigns application code to those applicants who do not have one and returns them in a list. """
         applicants = []
         for applicant in Applicant.select().where(Applicant.application_code >> None):
             applicant.application_code = cls.application_code_generator()
@@ -94,7 +105,27 @@ class Applicant(BaseModel):
 
     @staticmethod
     def assign_school():
+        """ Assigns a school to those applicants who do not have one. """
         for applicant in Applicant.select().where(Applicant.school >> None):
             city = City.get(City.city == applicant.city).school_city
             applicant.school = School.get(School.city == city).id
             applicant.save()
+
+    @staticmethod
+    def assign_interview():
+        """ Assigns an interview to those applicants who do not have one and returns them in a list. """
+        updated_applicants = []
+        for applicant in Applicant.select().where(Applicant.interview >> None):
+            interview = InterviewSlot.select().where(
+                InterviewSlot.reserved >> False,
+                InterviewSlot.mentor_id == applicant.school_id
+            ).order_by(fn.Random()).limit(1)[0]
+
+            interview.reserved = True
+            interview.save()
+            applicant.interview = interview
+            applicant.save()
+            updated_applicants.append(
+                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
+            )
+        return updated_applicants
