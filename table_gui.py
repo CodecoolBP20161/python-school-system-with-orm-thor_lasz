@@ -44,26 +44,19 @@ class TableWindow():
         frame = Frame(parent)
         frame.grid(row=2, column=0, columnspan=3, sticky=W+E+N+S)
         scrollbar = Scrollbar(frame)
-        text = Text(frame)
+        self.text = Text(frame)
         scrollbar.pack(side=RIGHT, fill=Y, )
-        text.pack(side=LEFT, fill=BOTH, expand=1)
-        scrollbar.config(command=text.yview)
-        text.config(yscrollcommand=scrollbar.set)
-
-        quote = """HAMLET: To be, or not to be--that is the question:
-        Whether 'tis nobler in the mind to suffer
-        The slings and arrows of outrageous fortune
-        Or to take arms against a sea of troubles
-        And by opposing end them. To die, to sleep--
-        No more--and by a sleep to say we end
-        The heartache, and the thousand natural shocks
-        That flesh is heir to. 'Tis a consummation
-        Devoutly to be wished."""
-        text.insert(END, quote)
+        self.text.pack(side=LEFT, fill=BOTH, expand=1)
+        scrollbar.config(command=self.text.yview)
+        self.text.config(yscrollcommand=scrollbar.set)
+        self.text.config(state=DISABLED)
 
     def send_sql_query(self):
         message = self.sql_query_entry.get()
-        print(Populator.run_sql(message))
+        self.text.config(state=NORMAL)
+        self.text.delete(1.0, END)
+        self.text.insert(END, Populator.run_sql(message))
+        self.text.config(state=DISABLED)
 
     def table_filler(self, table, parent, header):
         """ Prints the header and table contents on its parent in a grid. """
