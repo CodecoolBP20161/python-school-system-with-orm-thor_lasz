@@ -120,12 +120,14 @@ class Applicant(BaseModel):
                 InterviewSlot.reserved >> False,
                 InterviewSlot.mentor_id == applicant.school_id
             ).order_by(fn.Random()).limit(1)[0]
-
             interview.reserved = True
             interview.save()
             applicant.interview = interview
             applicant.save()
-            updated_applicants.append(
-                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
-            )
+            updated_applicants.append([
+                applicant.first_name, applicant.last_name,
+                applicant.application_code, applicant.interview.start,
+                applicant.interview.mentor.first_name, applicant.interview.mentor.last_name
+                ])
+
         return updated_applicants
