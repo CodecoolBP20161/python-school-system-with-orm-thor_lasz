@@ -99,7 +99,7 @@ class Applicant(BaseModel):
             applicant.save()
             applicants.append([
                     applicant.first_name, applicant.last_name,
-                    applicant.application_code, applicant.school.city
+                    applicant.application_code, applicant.school.city, applicant.email
                 ])
         return applicants
 

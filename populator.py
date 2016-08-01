@@ -2,6 +2,7 @@ from models import *
 from datetime import *
 from random import randint
 import psycopg2
+import smtplib
 
 
 class Populator():
@@ -104,3 +105,29 @@ class Populator():
         except Exception as e:
             print("Uh oh, can't connect. Invalid dbname, user or password?")
             print(e)
+
+
+class Email():
+
+    @staticmethod
+    def send_email(user, pwd, recipient, subject, body):
+
+        gmail_user = user
+        gmail_pwd = pwd
+        FROM = user
+        TO = recipient if type(recipient) is list else [recipient]
+        SUBJECT = subject
+        TEXT = body
+
+        message = """From: %s\nTo: %s\nSubject: %s\n\n%s
+        """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.ehlo()
+            server.starttls()
+            server.login(gmail_user, gmail_pwd)
+            server.sendmail(FROM, TO, message)
+            server.close()
+            print('successfully sent the mail')
+        except:
+            print("failed to send mail")
