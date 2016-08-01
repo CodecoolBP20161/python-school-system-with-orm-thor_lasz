@@ -1,5 +1,5 @@
 from models import *
-from populator import Populator
+from populator import Populator, Email
 from tabulate import tabulate
 from datetime import datetime
 import getpass
@@ -31,11 +31,22 @@ class FirstStory():
         else:
             Applicant.assign_school()
             updated_applicants = Applicant.assign_application_code()
+            for applicant in updated_applicants:
+                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+                                 "CodeCool application process", self.create_email_body(applicant))
 
         print("The following {0} applicants have been assigned an id and a school"
               "in the database.\n".format(len(updated_applicants)))
-        print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code", "School"]))
+        print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code", "School", "Email"]))
         print("\n")
+
+    @staticmethod
+    def create_email_body(applicant):
+        message = "Dear {} {}! \nWe are glad to inform you, that your application to Codecool has been processed. " \
+            "Your private application code is {}, with which you will be able to check your application status. " \
+            "Your interview will be held at the Codecool school in {}.\n\nThe Codecool team" \
+            "".format(applicant[0], applicant[1], applicant[2], applicant[3])
+        return message
 
 
 class SecondStory():
