@@ -69,8 +69,8 @@ class SecondStory():
             updated_applicants = Applicant.assign_interview()
 
             for applicant in updated_applicants:
-                # Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
-                #                  "CodeCool interview details", self.create_email_body(applicant))
+                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+                                 "CodeCool interview details", self.create_email_body(applicant))
 
             print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
             print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code",
