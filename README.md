@@ -21,3 +21,5 @@
 * Peewee
 * Tabulate library (pip install tabulate)
 * Tkinter library for the graphical user interface (apt-get install python3-tk)
+
+https://docs.google.com/spreadsheets/d/1qWHobRtQob6TARglOvqGOMMKZRp7P0dIuFkCAECkuV4/edit#gid=259803174

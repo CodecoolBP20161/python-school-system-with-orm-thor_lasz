@@ -34,13 +34,9 @@ class TableWindow():
 
     def build_query_page(self, parent):
         sql_query_label = Label(parent, text="SQL query: ").grid(column=0, row=0)
-        peewee_query_label = Label(parent, text="Peewee query: ").grid(column=0, row=1)
         self.sql_query_entry = Entry(parent, width=100)
         self.sql_query_entry.grid(column=1, row=0)
-        self.peewee_query_entry = Entry(parent, width=100)
-        self.peewee_query_entry.grid(column=1, row=1)
         sql_query_submit = Button(parent, text='Submit', command=self.send_sql_query).grid(column=2, row=0)
-        peewee_query_submit = Button(parent, text='Submit', command=self.onPress).grid(column=2, row=1)
 
         frame = Frame(parent)
         frame.grid(row=2, column=0, columnspan=3, sticky=W+E+N+S)
