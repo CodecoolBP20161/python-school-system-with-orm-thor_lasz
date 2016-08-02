@@ -73,8 +73,8 @@ class SecondStory():
                                  "CodeCool interview details", self.create_email_body(applicant))
 
             print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
-            print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code",
-                                                        "Interview starts at", "Mentor's first name", "Mentor's last name"]))
+            print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
+                                                        "Interview", "Mentor"]))
             print("\n")
 
     @staticmethod
@@ -143,8 +143,6 @@ class SixthStory():
         print("Here you can the list of all applicants.\n")
 
         menu_points = ["By status", "By time", "By location", "By personal data", " By school", " By mentor name"]
-        # for point in menu_points:
-        #     print("{0}.: {1}".format(menu_points.index(point) + 1, point))
 
         user_input = ""
         while user_input != "x":
@@ -238,10 +236,7 @@ class NinthStory():
         mentors_name = input("Give in any part of the mentor's name: ")
 
         print("\n Showing interviews for {}: ".format(mentors_name))
-        # print(tabulate())
         interview_data = InterviewSlot.get_interview_dates(mentors_name)
         print("\n")
-        print(tabulate(interview_data, headers=["Start", "End", "Application code", "Applicant's name"]))
+        print(tabulate(interview_data, headers=["Start", "End", "Applicant's name", "Application code"]))
         print("\n")
-        # for interview in InterviewSlot.get_interview_dates(mentors_name):
-        #     print(interview.start)

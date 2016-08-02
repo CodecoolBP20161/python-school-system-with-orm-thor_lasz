@@ -43,8 +43,13 @@ class InterviewSlot(BaseModel):
     @classmethod
     def get_interview_dates(cls, mentors_name):
         interview_data = []
+        name = ""
+        app_code = ""
         for interview in cls.select().join(Mentor).where(Mentor.first_name % str("%" + mentors_name + "%")):
-            interview_data.append([interview.start, interview.end])
+            for applicant in interview.applicant:
+                name = applicant.first_name + " " + applicant.last_name
+                app_code = applicant.application_code
+            interview_data.append([interview.start, interview.end, name, app_code])
 
         return interview_data
 
@@ -61,7 +66,7 @@ class Applicant(BaseModel):
     city = CharField()
     application_code = CharField(null=True)
     school = ForeignKeyField(School, related_name='applicant', null=True)
-    interview = ForeignKeyField(InterviewSlot, null=True)
+    interview = ForeignKeyField(InterviewSlot, null=True, related_name='applicant')
     status = CharField(default='New applicant')
 
     @classmethod
@@ -135,7 +140,7 @@ class Applicant(BaseModel):
             updated_applicants.append([
                 applicant.first_name, applicant.last_name,
                 applicant.application_code, applicant.interview.start,
-                applicant.interview.mentor.first_name, applicant.interview.mentor.last_name
+                str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
                 ])
 
         return updated_applicants
