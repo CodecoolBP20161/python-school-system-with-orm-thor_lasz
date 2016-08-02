@@ -65,31 +65,10 @@ class SecondStory():
 class ThirdStory():
 
     def __init__(self):
-        print("Third Story: ")
-        print("Here you can the details of your application.\n")
-        ids = []
-        for applicant in Applicant.select():
-            ids.append(applicant.application_code)
-        app_num = input("Please give me your application number: ")
-        if app_num in ids:
-            result = Applicant.select(
-                Applicant.first_name,
-                Applicant.last_name,
-                Applicant.email,
-                Applicant.city,
-                Applicant.application_code,
-                Applicant.school,
-                Applicant.status
-                ).where(Applicant.application_code == app_num).tuples()
-            print("\n")
-            print(tabulate(result, headers=[
-                    "First name", "Last name", "Email", "City",
-                    "Application code", "School", "Status"
-                ]))
-            print("\n")
-        else:
-            print('Not a valid application code!')
-            print("\n")
+        app_num = input("Application number: ")
+        print(tabulate(Applicant.get_applicant_data(Applicant.get_application_codes(), app_num), headers=[]))
+
+
 
 
 class FourthStory():
@@ -140,7 +119,7 @@ class SixthStory():
                                            Applicant.city,
                                            Applicant.status)
                           .where(Applicant.status == filter_by).tuples())
-                print ("\n")
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
 
@@ -152,9 +131,9 @@ class SixthStory():
                     if filter_by < applicant.interview.start:
                         result.append(
                             [applicant.first_name, applicant.last_name, applicant.email,
-                                applicant.city, applicant.interview.start]
+                             applicant.city, applicant.interview.start]
                         )
-                print ("\n")
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City", "Interview starts at"]))
                 print("\n\n")
 
@@ -165,9 +144,9 @@ class SixthStory():
                     Applicant.last_name,
                     Applicant.email,
                     Applicant.city
-                    ).where(Applicant.city == filter_by).tuples()
+                ).where(Applicant.city == filter_by).tuples()
 
-                print ("\n")
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
 
@@ -178,8 +157,8 @@ class SixthStory():
                     Applicant.last_name,
                     Applicant.email,
                     Applicant.city
-                    ).where(Applicant.email % str("%"+filter_by+"%")).tuples()
-                print ("\n")
+                ).where(Applicant.email % str("%" + filter_by + "%")).tuples()
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
 
@@ -190,9 +169,9 @@ class SixthStory():
                     Applicant.last_name,
                     Applicant.email,
                     Applicant.city
-                    ).join(City, JOIN.FULL, Applicant.city == City.city.where(City.school_city == filter_by).tuples())
+                ).join(City, JOIN.FULL, Applicant.city == City.city.where(City.school_city == filter_by).tuples())
 
-                print ("\n")
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
 
@@ -202,6 +181,6 @@ class SixthStory():
                 for applicant in Applicant.select():
                     if filter_by == applicant.interview.mentor.first_name:
                         result.append([applicant.first_name, applicant.last_name, applicant.email, applicant.city])
-                print ("\n")
+                print("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")

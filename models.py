@@ -56,6 +56,7 @@ class Applicant(BaseModel):
     interview = ForeignKeyField(InterviewSlot, null=True)
     status = CharField(default='New applicant')
 
+
     @classmethod
     def get_application_codes(cls):
         """ Saves to the class and returns all application codes of the applicants. """
@@ -129,3 +130,18 @@ class Applicant(BaseModel):
                 [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
             )
         return updated_applicants
+
+    @classmethod
+    def get_applicant_data(cls, ids, app_num):
+        if app_num in ids:
+            Applicant_objekt = Applicant.get(app_num == Applicant.application_code)
+            result = [["Name: ", Applicant_objekt.first_name + " " + Applicant_objekt.last_name],
+                      ["Email adress:", Applicant_objekt.email],
+                      ["City: ", Applicant_objekt.city], ["Application code: ", Applicant_objekt.application_code],
+                      ["School:", Applicant_objekt.school], ["Status:", Applicant_objekt.status]]
+            return result
+        else:
+            return ["Invalid application code"]
+
+
+
