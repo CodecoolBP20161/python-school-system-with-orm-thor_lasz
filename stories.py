@@ -235,6 +235,13 @@ class NinthStory():
         print("Ninth Story: ")
         print("Here you can check all the interviews scheduled for you.\n")
 
-        mentors_name = input("Show interview dates for mentor: ")
+        mentors_name = input("Give in any part of the mentor's name: ")
 
-        
+        print("\n Showing interviews for {}: ".format(mentors_name))
+        # print(tabulate())
+        interview_data = InterviewSlot.get_interview_dates(mentors_name)
+        print("\n")
+        print(tabulate(interview_data, headers=["Start", "End", "Application code", "Applicant's name"]))
+        print("\n")
+        # for interview in InterviewSlot.get_interview_dates(mentors_name):
+        #     print(interview.start)

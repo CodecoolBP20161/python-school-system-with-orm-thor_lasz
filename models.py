@@ -40,6 +40,14 @@ class InterviewSlot(BaseModel):
     reserved = BooleanField(default=False)
     mentor = ForeignKeyField(Mentor, null=True)
 
+    @classmethod
+    def get_interview_dates(cls, mentors_name):
+        interview_data = []
+        for interview in cls.select().join(Mentor).where(Mentor.first_name % str("%" + mentors_name + "%")):
+            interview_data.append([interview.start, interview.end])
+
+        return interview_data
+
 
 class City(BaseModel):
     city = CharField()
