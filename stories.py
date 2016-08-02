@@ -227,3 +227,14 @@ class SixthStory():
                 print ("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
+
+
+class NinthStory():
+
+    def __init__(self):
+        print("Ninth Story: ")
+        print("Here you can check all the interviews scheduled for you.\n")
+
+        mentors_name = input("Show interview dates for mentor: ")
+
+        
