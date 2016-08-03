@@ -27,12 +27,6 @@ class School(BaseModel):
     city = CharField()
 
 
-class Question(BaseModel):
-    content = CharField()
-    applicant = ForeignKeyField(Applicant, related_name="applicant_question", null=True)
-    mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
-
-
 class Mentor(BaseModel):
     first_name = CharField()
     last_name = CharField()
@@ -154,3 +148,10 @@ class Applicant(BaseModel):
                 ])
 
         return updated_applicants
+
+
+class Question(BaseModel):
+    content = CharField()
+    applicant = ForeignKeyField(Applicant, related_name="applicant_question", null=True)
+    mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
+    status = CharField(default="Unassigned")

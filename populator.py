@@ -11,8 +11,8 @@ class Populator():
     def establish_connection():
         """ Connects to the database and creates the necessary tables. """
         db.connect()
-        db.drop_tables([InterviewSlot, School, Applicant, City, Mentor], safe=True)
-        db.create_tables([InterviewSlot, School, Applicant, City, Mentor], safe=True)
+        db.drop_tables([Question, InterviewSlot, School, Applicant, City, Mentor], safe=True)
+        db.create_tables([Question, InterviewSlot, School, Applicant, City, Mentor], safe=True)
 
     @staticmethod
     def populate_tables():
@@ -24,19 +24,19 @@ class Populator():
             Applicant.insert_many(applicants).execute()
             Mentor.insert_many(mentors).execute()
             InterviewSlot.insert_many(interview_slots).execute()
-            Question.insert_many(questions).execute
+            Question.insert_many(questions).execute()
 
     @staticmethod
     def example_data():
         """ Contains the example data for populating the tables in the database. """
 
         questions = [
-            {"content": "", "applicant": 1},
-            {"content": "", "applicant": 1},
-            {"content": "", "applicant": 2},
-            {"content": "", "applicant": 3},
-            {"content": "", "applicant": 5},
-            {"content": "", "applicant": 8}
+            {"content": "Who are those horrible orange creatures over there?", "applicant": 1},
+            {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1},
+            {"content": "Is it just coincidence that Dr. Zoidberg is poor and miserably lonely?", "applicant": 2},
+            {"content": "What makes a good man go neutral?", "applicant": 3},
+            {"content": "Did everything just taste purple?", "applicant": 5},
+            {"content": "Do you see a robot in this room named Folder?", "applicant": 8}
         ]
 
         interview_slots = [
