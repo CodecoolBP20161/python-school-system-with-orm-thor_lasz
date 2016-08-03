@@ -17,18 +17,14 @@ class Populator():
     @staticmethod
     def populate_tables():
         """ Populates the tables with the example data. """
-        cities, applicants, mentors, interview_slots = Populator.example_data()
+        cities, applicants, mentors, interview_slots, questions = Populator.example_data()
 
         with db.atomic():
             City.insert_many(cities).execute()
             Applicant.insert_many(applicants).execute()
             Mentor.insert_many(mentors).execute()
             InterviewSlot.insert_many(interview_slots).execute()
-
-            # for interview in InterviewSlot.select():
-            #     interview.mentor_id = Mentor.get(Mentor.id == random.randint(1, 4))
-            #     interview.save()
-                # mentor 1, mentor 2?
+            Question.insert_many(questions).execute
 
     @staticmethod
     def example_data():
@@ -105,7 +101,7 @@ class Populator():
             {"first_name": "Richard", "last_name": "Nixon", "email": "nixonalwayswins@head.gov", "school": miskolc}
         ]
 
-        return cities, applicants, mentors, interview_slots
+        return cities, applicants, mentors, interview_slots, questions
 
     @staticmethod
     def run_sql(query):
