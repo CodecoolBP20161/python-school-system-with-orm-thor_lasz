@@ -79,7 +79,6 @@ class MainMenu():
             print("\nPress 'x' to exit\n")
 
             user_input = getpass.getpass(prompt="").lower().strip()
-            print(user_input)
             if user_input in self.applicant_menu:
                 self.applicant_menu[user_input][1]()
                 user_input = "x"

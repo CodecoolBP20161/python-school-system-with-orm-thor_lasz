@@ -147,7 +147,7 @@ class FifthStory():
 
     def __init__(self):
         print("Fifth story:")
-        print("You asked questions from Codecool. Here you can check wheter they are answered. ")
+        print("You asked questions from Codecool. Here you can check whether they are answered. ")
 
 
 class SixthStory():
