@@ -38,7 +38,9 @@ class InterviewSlot(BaseModel):
     start = DateTimeField()
     end = DateTimeField()
     reserved = BooleanField(default=False)
-    mentor = ForeignKeyField(Mentor, null=True)
+    school_id = CharField(null=True)
+    mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_1")
+    second_mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_2")
 
     @classmethod
     def get_interview_dates(cls, mentors_name):
@@ -128,11 +130,13 @@ class Applicant(BaseModel):
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
         updated_applicants = []
+
         for applicant in Applicant.select().where(Applicant.interview >> None):
             interview = InterviewSlot.select().where(
                 InterviewSlot.reserved >> False,
                 InterviewSlot.mentor_id == applicant.school_id
-            ).order_by(fn.Random()).limit(1)[0]
+            ).order_by(InterviewSlot.start.asc()).get()
+
             interview.reserved = True
             interview.save()
             applicant.interview = interview
