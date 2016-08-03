@@ -4,6 +4,11 @@ from tabulate import tabulate
 from datetime import datetime
 import getpass
 
+# # TODO:
+# - interviewslot multiple hozzarendelés bug kijavítása
+# - story1-2 bug kijavítása
+# - hülyebiztosság kb minden sztorinál
+
 
 class StoryHandler():
     pass
@@ -31,9 +36,9 @@ class FirstStory():
         else:
             Applicant.assign_school()
             updated_applicants = Applicant.assign_application_code()
-            for applicant in updated_applicants:
-                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
-                                 "CodeCool application process", self.create_email_body(applicant))
+            # for applicant in updated_applicants:
+            #     Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+            #                      "CodeCool application process", self.create_email_body(applicant))
 
         print("The following {0} applicants have been assigned an id and a school"
               "in the database.\n".format(len(updated_applicants)))
@@ -68,9 +73,9 @@ class SecondStory():
         else:
             updated_applicants = Applicant.assign_interview()
 
-            for applicant in updated_applicants:
-                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
-                                 "CodeCool interview details", self.create_email_body(applicant))
+            # for applicant in updated_applicants:
+            #     Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+            #                      "CodeCool interview details", self.create_email_body(applicant))
 
             print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
             print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
@@ -80,9 +85,10 @@ class SecondStory():
     @staticmethod
     def create_email_body(applicant):
         message = "Dear {} {}! \nWe are glad to inform you, that you have been assigned an interview slot at " \
-            "Codecool. The date of the interview is {} and it will be held by {} {}.\n\nThe Codecool team" \
-            "".format(applicant[0], applicant[1], applicant[3], applicant[4], applicant[5])
+            "Codecool. The date of the interview is {} and it will be held by {}.\n\nThe Codecool team" \
+            "".format(applicant[0], applicant[1], applicant[3], applicant[4])
         return message
+
 
 class ThirdStory():
 
