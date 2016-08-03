@@ -30,6 +30,10 @@ class MainMenu():
             ("2", ("Story 4: Interview Details", FourthStory))
         ])
 
+        self.mentor_menu = OrderedDict([
+            ("1", ("Story 9: Check scheduled interview", NinthStory))
+        ])
+
         print (" --- WELCOME TO CODECOOL APPLICATION SYSTEM ---")
         print("\nPlease choose from the following options:\n")
 
@@ -60,8 +64,8 @@ class MainMenu():
                 self.state = "administrator"
                 return
             elif user_input == "3":
-                return
                 self.state = "mentor"
+                return
 
     def applicant(self):
         """ The applicant view submenu. """
@@ -95,8 +99,17 @@ class MainMenu():
 
     def mentor(self):
         """ The mento view submenu. """
-        print("Sorry buddy, nothing to do here. Press any key to return to the main menu.")
-        user_input = getpass.getpass(prompt="")
+
+        user_input = None
+        while user_input != "x":
+            for key, value in self.mentor_menu.items():
+                print("{}) {}".format(key, value[0]))
+            print("\nPress 'x' to exit\n")
+
+            user_input = getpass.getpass(prompt="")
+            if user_input in self.administrator_menu:
+                self.mentor_menu[user_input][1]()
+        self.state = "main"
 
 
 def main():

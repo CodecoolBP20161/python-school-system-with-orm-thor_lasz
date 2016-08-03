@@ -38,7 +38,22 @@ class InterviewSlot(BaseModel):
     start = DateTimeField()
     end = DateTimeField()
     reserved = BooleanField(default=False)
-    mentor = ForeignKeyField(Mentor, null=True)
+    school_id = CharField(null=True)
+    mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_1")
+    second_mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_2")
+
+    @classmethod
+    def get_interview_dates(cls, mentors_name):
+        interview_data = []
+        name = ""
+        app_code = ""
+        for interview in cls.select().join(Mentor).where(Mentor.first_name % str("%" + mentors_name + "%")):
+            for applicant in interview.applicant:
+                name = applicant.first_name + " " + applicant.last_name
+                app_code = applicant.application_code
+            interview_data.append([interview.start, interview.end, name, app_code])
+
+        return interview_data
 
 
 class City(BaseModel):
@@ -53,7 +68,7 @@ class Applicant(BaseModel):
     city = CharField()
     application_code = CharField(null=True)
     school = ForeignKeyField(School, related_name='applicant', null=True)
-    interview = ForeignKeyField(InterviewSlot, null=True)
+    interview = ForeignKeyField(InterviewSlot, null=True, related_name='applicant')
     status = CharField(default='New applicant')
 
     @classmethod
@@ -115,17 +130,21 @@ class Applicant(BaseModel):
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
         updated_applicants = []
+
         for applicant in Applicant.select().where(Applicant.interview >> None):
             interview = InterviewSlot.select().where(
                 InterviewSlot.reserved >> False,
-                InterviewSlot.mentor_id == applicant.school_id
-            ).order_by(fn.Random()).limit(1)[0]
+                InterviewSlot.school_id == applicant.school_id
+            ).order_by(InterviewSlot.start.asc()).get()
 
             interview.reserved = True
             interview.save()
             applicant.interview = interview
             applicant.save()
-            updated_applicants.append(
-                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
-            )
+            updated_applicants.append([
+                applicant.first_name, applicant.last_name,
+                applicant.application_code, applicant.interview.start,
+                str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
+                ])
+
         return updated_applicants

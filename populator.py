@@ -25,28 +25,30 @@ class Populator():
             Mentor.insert_many(mentors).execute()
             InterviewSlot.insert_many(interview_slots).execute()
 
-            for interview in InterviewSlot.select():
-                interview.mentor_id = Mentor.get(Mentor.id == random.randint(1, 2))
-                interview.save()
+            # for interview in InterviewSlot.select():
+            #     interview.mentor_id = Mentor.get(Mentor.id == random.randint(1, 4))
+            #     interview.save()
+                # mentor 1, mentor 2?
 
     @staticmethod
     def example_data():
         """ Contains the example data for populating the tables in the database. """
 
         interview_slots = [
-            {"start": datetime(2016, 8, 15, 10, 0), "end": datetime(2016, 8, 15, 11, 0)},
-            {"start": datetime(2016, 8, 15, 13, 0), "end": datetime(2016, 8, 15, 14, 0)},
-            {"start": datetime(2016, 8, 15, 15, 0), "end": datetime(2016, 8, 15, 16, 0)},
-            {"start": datetime(2016, 8, 16, 10, 0), "end": datetime(2016, 8, 16, 11, 0)},
-            {"start": datetime(2016, 8, 16, 13, 0), "end": datetime(2016, 8, 16, 14, 0)},
-            {"start": datetime(2016, 8, 16, 15, 0), "end": datetime(2016, 8, 16, 16, 0)},
-            {"start": datetime(2016, 8, 17, 10, 0), "end": datetime(2016, 8, 17, 11, 0)},
-            {"start": datetime(2016, 8, 17, 13, 0), "end": datetime(2016, 8, 17, 14, 0)},
-            {"start": datetime(2016, 8, 17, 15, 0), "end": datetime(2016, 8, 17, 16, 0)},
-            {"start": datetime(2016, 8, 18, 10, 0), "end": datetime(2016, 8, 18, 11, 0)},
-            {"start": datetime(2016, 8, 18, 13, 0), "end": datetime(2016, 8, 18, 14, 0)},
-            {"start": datetime(2016, 8, 19, 10, 0), "end": datetime(2016, 8, 19, 11, 0)},
-            {"start": datetime(2016, 8, 19, 13, 0), "end": datetime(2016, 8, 19, 14, 0)}
+            {"start": datetime(2016, 8, 15, 10, 0), "end": datetime(2016, 8, 15, 11, 0), "mentor": 1, "school_id": 1},
+            {"start": datetime(2016, 8, 15, 13, 0), "end": datetime(2016, 8, 15, 14, 0), "mentor": 2, "school_id": 1},
+            {"start": datetime(2016, 8, 15, 15, 0), "end": datetime(2016, 8, 15, 16, 0), "mentor": 1, "school_id": 1},
+            {"start": datetime(2016, 8, 16, 10, 0), "end": datetime(2016, 8, 16, 11, 0), "mentor": 2, "school_id": 1},
+            {"start": datetime(2016, 8, 16, 13, 0), "end": datetime(2016, 8, 16, 14, 0), "mentor": 1, "school_id": 1},
+            {"start": datetime(2016, 8, 16, 15, 0), "end": datetime(2016, 8, 16, 16, 0), "mentor": 2, "school_id": 1},
+            {"start": datetime(2016, 8, 16, 15, 0), "end": datetime(2016, 8, 16, 16, 0), "mentor": 1, "school_id": 1},
+            {"start": datetime(2016, 8, 17, 10, 0), "end": datetime(2016, 8, 17, 11, 0), "mentor": 3, "school_id": 2},
+            {"start": datetime(2016, 8, 17, 13, 0), "end": datetime(2016, 8, 17, 14, 0), "mentor": 4, "school_id": 2},
+            {"start": datetime(2016, 8, 17, 15, 0), "end": datetime(2016, 8, 17, 16, 0), "mentor": 3, "school_id": 2},
+            {"start": datetime(2016, 8, 18, 10, 0), "end": datetime(2016, 8, 18, 11, 0), "mentor": 4, "school_id": 2},
+            {"start": datetime(2016, 8, 18, 13, 0), "end": datetime(2016, 8, 18, 14, 0), "mentor": 3, "school_id": 2},
+            {"start": datetime(2016, 8, 19, 10, 0), "end": datetime(2016, 8, 19, 11, 0), "mentor": 4, "school_id": 2},
+            {"start": datetime(2016, 8, 19, 13, 0), "end": datetime(2016, 8, 19, 14, 0), "mentor": 3, "school_id": 2}
 
         ]
 
@@ -89,7 +91,9 @@ class Populator():
 
         mentors = [
             {"first_name": "Hubert", "last_name": "Farnsworth", "email": "", "school": bp},
-            {"first_name": "Lord", "last_name": "Nibbler", "email": "iamcute@nibblonians.niblo", "school": miskolc}
+            {"first_name": "Morbo", "last_name": "the Annihilator", "email": "iwilldestroyyou@gmail.com", "school": bp},
+            {"first_name": "Lord", "last_name": "Nibbler", "email": "iamcute@nibblonians.niblo", "school": miskolc},
+            {"first_name": "Richard", "last_name": "Nixon", "email": "nixonalwayswins@head.gov", "school": miskolc}
         ]
 
         return cities, applicants, mentors, interview_slots

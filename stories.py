@@ -4,6 +4,11 @@ from tabulate import tabulate
 from datetime import datetime
 import getpass
 
+# # TODO:
+# - interviewslot multiple hozzarendelés bug kijavítása
+# - story1-2 bug kijavítása
+# - hülyebiztosság kb minden sztorinál
+
 
 class StoryHandler():
     pass
@@ -31,9 +36,9 @@ class FirstStory():
         else:
             Applicant.assign_school()
             updated_applicants = Applicant.assign_application_code()
-            for applicant in updated_applicants:
-                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
-                                 "CodeCool application process", self.create_email_body(applicant))
+            # for applicant in updated_applicants:
+            #     Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+            #                      "CodeCool application process", self.create_email_body(applicant))
 
         print("The following {0} applicants have been assigned an id and a school"
               "in the database.\n".format(len(updated_applicants)))
@@ -67,10 +72,22 @@ class SecondStory():
             return
         else:
             updated_applicants = Applicant.assign_interview()
+
+            # for applicant in updated_applicants:
+            #     Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+            #                      "CodeCool interview details", self.create_email_body(applicant))
+
             print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
-            print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code",
-                                                        "Interview starts at"]))
+            print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
+                                                        "Interview", "Mentor"]))
             print("\n")
+
+    @staticmethod
+    def create_email_body(applicant):
+        message = "Dear {} {}! \nWe are glad to inform you, that you have been assigned an interview slot at " \
+            "Codecool. The date of the interview is {} and it will be held by {}.\n\nThe Codecool team" \
+            "".format(applicant[0], applicant[1], applicant[3], applicant[4])
+        return message
 
 
 class ThirdStory():
@@ -132,8 +149,6 @@ class SixthStory():
         print("Here you can the list of all applicants.\n")
 
         menu_points = ["By status", "By time", "By location", "By personal data", " By school", " By mentor name"]
-        # for point in menu_points:
-        #     print("{0}.: {1}".format(menu_points.index(point) + 1, point))
 
         user_input = ""
         while user_input != "x":
@@ -216,3 +231,18 @@ class SixthStory():
                 print ("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
+
+
+class NinthStory():
+
+    def __init__(self):
+        print("Ninth Story: ")
+        print("Here you can check all the interviews scheduled for you.\n")
+
+        mentors_name = input("Give in any part of the mentor's name: ")
+
+        print("\n Showing interviews for {}: ".format(mentors_name))
+        interview_data = InterviewSlot.get_interview_dates(mentors_name)
+        print("\n")
+        print(tabulate(interview_data, headers=["Start", "End", "Applicant's name", "Application code"]))
+        print("\n")
