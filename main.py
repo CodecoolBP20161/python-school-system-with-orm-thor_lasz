@@ -27,7 +27,9 @@ class MainMenu():
 
         self.applicant_menu = OrderedDict([
             ("1", ("Story 3: Application details", ThirdStory)),
-            ("2", ("Story 4: Interview Details", FourthStory))
+            ("2", ("Story 4: Interview Details", FourthStory)),
+            ("3", ("Story 5: Check the status of your questions", FifthStory))
+
         ])
 
         self.mentor_menu = OrderedDict([
