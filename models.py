@@ -134,7 +134,7 @@ class Applicant(BaseModel):
         for applicant in Applicant.select().where(Applicant.interview >> None):
             interview = InterviewSlot.select().where(
                 InterviewSlot.reserved >> False,
-                InterviewSlot.mentor_id == applicant.school_id
+                InterviewSlot.school_id == applicant.school_id
             ).order_by(InterviewSlot.start.asc()).get()
 
             interview.reserved = True
