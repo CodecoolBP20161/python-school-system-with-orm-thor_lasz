@@ -34,6 +34,15 @@ class Populator():
     def example_data():
         """ Contains the example data for populating the tables in the database. """
 
+        questions = [
+            {"content": "", "applicant": 1},
+            {"content": "", "applicant": 1},
+            {"content": "", "applicant": 2},
+            {"content": "", "applicant": 3},
+            {"content": "", "applicant": 5},
+            {"content": "", "applicant": 8}
+        ]
+
         interview_slots = [
             {"start": datetime(2016, 8, 15, 10, 0), "end": datetime(2016, 8, 15, 11, 0), "mentor": 1, "school_id": 1},
             {"start": datetime(2016, 8, 15, 13, 0), "end": datetime(2016, 8, 15, 14, 0), "mentor": 2, "school_id": 1},
