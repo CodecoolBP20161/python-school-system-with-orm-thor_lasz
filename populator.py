@@ -33,7 +33,7 @@ class Populator():
         questions = [
             {"content": "Who are those horrible orange creatures over there?", "applicant": 1},
             {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1},
-            {"content": "Is it just coincidence that Dr. Zoidberg is poor and miserably lonely?", "applicant": 2},
+            {"content": "Is it just coincidence that Zoidberg is poor and miserably lonely?", "applicant": 2},
             {"content": "What makes a good man go neutral?", "applicant": 3},
             {"content": "Did everything just taste purple?", "applicant": 5},
             {"content": "Do you see a robot in this room named Folder?", "applicant": 8}

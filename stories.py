@@ -72,15 +72,17 @@ class SecondStory():
             return
         else:
             updated_applicants = Applicant.assign_interview()
+            if updated_applicants is None:
+                print("\nPlease assign the applicants to school before assigning them an interview in their school.\n")
+            else:
+                for applicant in updated_applicants:
+                    Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+                                     "CodeCool interview details", self.create_email_body(applicant))
 
-            # for applicant in updated_applicants:
-            #     Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
-            #                      "CodeCool interview details", self.create_email_body(applicant))
-
-            print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
-            print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
-                                                        "Interview", "Mentor"]))
-            print("\n")
+                print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
+                print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
+                                                            "Interview", "Mentor"]))
+                print("\n")
 
     @staticmethod
     def create_email_body(applicant):
@@ -148,6 +150,13 @@ class FifthStory():
     def __init__(self):
         print("Fifth story:")
         print("You asked questions from Codecool. Here you can check whether they are answered. ")
+
+        current_application_code = input("Please give in your application code: ")
+        applicants_questions = Question.get_questions(current_application_code)
+
+        print("\nYou have the following questions:\n")
+        print(tabulate(applicants_questions, headers=["Question", "Answer", "Mentor", "Status"]))
+        print("\n")
 
 
 class SixthStory():

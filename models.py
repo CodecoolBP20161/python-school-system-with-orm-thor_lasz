@@ -132,6 +132,8 @@ class Applicant(BaseModel):
         updated_applicants = []
 
         for applicant in Applicant.select().where(Applicant.interview >> None):
+            if applicant.school_id is None:
+                return None
             interview = InterviewSlot.select().where(
                 InterviewSlot.reserved >> False,
                 InterviewSlot.school_id == applicant.school_id
@@ -152,6 +154,15 @@ class Applicant(BaseModel):
 
 class Question(BaseModel):
     content = CharField()
+    answer = CharField(null=True)
     applicant = ForeignKeyField(Applicant, related_name="applicant_question", null=True)
     mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
-    status = CharField(default="Unassigned")
+    status = CharField(default="New")
+
+    @classmethod
+    def get_questions(cls, applicant_id):
+        applicants_questions = []
+        for question in cls.select().join(Applicant).where(Applicant.application_code == applicant_id):
+            applicants_questions.append([question.content, question.answer, question.mentor, question.status])
+
+        return applicants_questions
