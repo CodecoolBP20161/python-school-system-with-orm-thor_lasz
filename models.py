@@ -3,10 +3,37 @@ import getpass
 import random
 import string
 
+
 # Configure your database connection here
 # database name = should be your username on your laptop
 # database user = should be your username on your laptop
 db = PostgresqlDatabase(str(getpass.getuser()), user=str(getpass.getuser()))
+
+
+class Email():
+
+    @staticmethod
+    def send_email(user, pwd, recipient, subject, body):
+        gmail_user = user
+        gmail_pwd = pwd
+        FROM = user
+        TO = recipient if type(recipient) is list else [recipient]
+        SUBJECT = subject
+        TEXT = body
+
+        message = """From: %s\nTo: %s\nSubject: %s\n\n%s
+       """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.ehlo()
+            server.starttls()
+            server.login(gmail_user, gmail_pwd)
+            server.sendmail(FROM, TO, message)
+            server.close()
+            print('successfully sent the mail')
+        except:
+            print("failed to send mail")
+
 
 
 class BaseModel(Model):
@@ -112,6 +139,18 @@ class Applicant(BaseModel):
             applicant.save()
 
     @staticmethod
+    def send_email_to_mentor(updated_applicants):
+        for new_interview in updated_applicants:
+            for email in Mentor.select(Mentor.email).where(Mentor.id == new_interview[-2]):
+                print(email.email)
+                #print(new_interview[0], " ", new_interview[1])
+                text_of_mail = "Dear {0} {1}, Your interview with {1} {2} will be at {3}:\n".format(new_interview[0], new_interview[1], new_interview[2], new_interview[4])
+                Email.send_email("laszthor", "codecool", "laszthor@gmail.com", "CodeCool interview details", text_of_mail)
+
+
+
+
+    @staticmethod
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
         updated_applicants = []
@@ -125,7 +164,10 @@ class Applicant(BaseModel):
             interview.save()
             applicant.interview = interview
             applicant.save()
-            updated_applicants.append(
-                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
-            )
+            updated_applicants.append([
+                applicant.interview.mentor.first_name, applicant.interview.mentor.last_name, applicant.last_name,
+                applicant.application_code, applicant.interview.start, applicant.interview.mentor_id, applicant.city
+                ])
+            print(Applicant.send_email_to_mentor(updated_applicants))
+            # print(updated_applicants)
         return updated_applicants

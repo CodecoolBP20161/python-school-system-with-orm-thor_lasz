@@ -39,27 +39,32 @@ class FirstStory():
 
 
 class SecondStory():
-
     def __init__(self):
         print("Second Story: ")
         print("Here you can assign interview slots to applicants.\n")
-
         no_interview = Applicant.get_applicants_without_interview()
         print("There are {0} applicants without interview in the database.\n".format(len(no_interview)))
         print("The list of these applicants: \n")
         print(tabulate(no_interview, headers=["First name", "Last name", "Email", "City"]))
-
         print("\nPress x to quit, press any other key to assign an interview slot to these applicants.\n")
         user_input = getpass.getpass(prompt="")
-
         if user_input == "x":
             return
         else:
             updated_applicants = Applicant.assign_interview()
+            for applicant in updated_applicants:
+                Email.send_email("laszthor", "codecool", "laszthor@gmail.com",
+                                 "CodeCool interview details", self.create_email_body(applicant))
             print("The following {0} applicants have been assigned an interview.\n".format(len(updated_applicants)))
-            print(tabulate(updated_applicants, headers=["First name", "Last name", "Application code",
-                                                        "Interview starts at"]))
+            print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
+                                                        "Interview", "Mentor"]))
             print("\n")
+    @staticmethod
+    def create_email_body(applicant):
+        message = "Dear {} {}! \nWe are glad to inform you, that you have been assigned an interview slot at " \
+            "Codecool. The date of the interview is {} and it will be held by {}.\n\nThe Codecool team" \
+            "".format(applicant[0], applicant[1], applicant[3], applicant[4])
+        return message
 
 
 class ThirdStory():
