@@ -143,6 +143,13 @@ class FourthStory():
             ))
 
 
+class FifthStory():
+
+    def __init__(self):
+        print("Fifth story:")
+        print("You asked questions from Codecool. Here you can check wheter they are answered. ")
+
+
 class SixthStory():
     def __init__(self):
         print("Sixth Story: ")
