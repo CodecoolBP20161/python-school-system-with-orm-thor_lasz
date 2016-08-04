@@ -121,10 +121,12 @@ class Applicant(BaseModel):
     @staticmethod
     def assign_school():
         """ Assigns a school to those applicants who do not have one. """
-        for applicant in Applicant.select().where(Applicant.school >> None):
-            city = City.get(City.city == applicant.city).school_city
-            applicant.school = School.get(School.city == city).id
-            applicant.save()
+
+        def free_interview_slot():
+            for applicant in Applicant.select().where(Applicant.interview >> None):
+                for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+                    if slot.mentor.school_id == applicant.school_id:
+                        return slot
 
     @staticmethod
     def assign_interview():
