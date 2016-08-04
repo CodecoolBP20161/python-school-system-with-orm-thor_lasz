@@ -173,7 +173,6 @@ class Question(BaseModel):
         question_data = []
 
         for question in cls.select():
-            print(question.mentor)
             question_data.append([
                 question.content, question.status, question.time, question.applicant.application_code,
                 question.mentor

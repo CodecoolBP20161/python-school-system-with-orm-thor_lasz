@@ -255,8 +255,19 @@ class EightStory():
         print("Eight Story:")
         print("Here you can handle the questions of the applicants.\n")
 
-        print(tabulate(Question.get_questions_for_administrator()))
+        menu_points = ["Assign questions to mentors", "By status", "By time",
+                       "By applicant", "By school", "By mentor name"]
+
+        print(tabulate(Question.get_questions_for_administrator(), headers=["Question", "Answer", "Date", "Application code", "Mentor"]))
         print("\n")
+
+        user_input = None
+        while user_input != "x":
+            for point in menu_points:
+                print("{0}.: {1}".format(menu_points.index(point) + 1, point))
+            print("\nPress 'x' to exit\n")
+            user_input = input("Give in the number of your choice:")
+
 
 
 
