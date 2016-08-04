@@ -174,11 +174,39 @@ class Question(BaseModel):
 
         for question in cls.select():
             question_data.append([
-                question.content, question.status, question.time, question.applicant.application_code,
-                question.mentor  # , question.applicant.school.city
+                question.id, question.content, question.status, question.time, question.applicant.application_code
                 ])
+            if question.mentor is not None:
+                question_data[-1].append(str(question.mentor.first_name + " " + question.mentor.last_name))
+            else:
+                question_data[-1].append("")
             if question.applicant.school is not None:
                 question_data[-1].append(question.applicant.school.city)
             else:
                 question_data[-1].append("")
         return question_data
+
+    @classmethod
+    def get_mentors_for_question(cls, selected_question):
+        mentors = []
+
+        try:
+            school_id = cls.get(cls.id == selected_question).applicant.school.id
+        except AttributeError:
+            print("You cannot assign a mentor to a question, if the applicant is not assigned to a school!\n")
+            return
+        except Question.DoesNotExist:
+            print("Please choose a valid question id!\n")
+            return
+
+        for mentor in Mentor.select().join(School).where(School.id == school_id):
+            mentors.append([mentor.id, mentor.first_name + " " + mentor.last_name])
+
+        return mentors
+
+    @classmethod
+    def assign_mentor(cls, question_id, mentor_id):
+        question = cls.get(cls.id == question_id)
+        question.mentor = mentor_id
+        question.status = "Waiting for answer"
+        question.save()

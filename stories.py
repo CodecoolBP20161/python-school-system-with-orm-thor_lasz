@@ -258,15 +258,48 @@ class EightStory():
         menu_points = ["Assign questions to mentors", "By status", "By time",
                        "By applicant", "By school", "By mentor name"]
 
-        print(tabulate(Question.get_questions_for_administrator(), headers=["Question", "Answer", "Date", "Application code", "Mentor", "School"]))
-        print("\n")
-
         user_input = None
         while user_input != "x":
+            print(tabulate(Question.get_questions_for_administrator(), headers=["Id", "Question", "Answer", "Date", "App id", "Mentor", "School"]))
+            print("\n")
             for point in menu_points:
                 print("{0}.: {1}".format(menu_points.index(point) + 1, point))
             print("\nPress 'x' to exit\n")
-            user_input = input("Give in the number of your choice:")
+            user_input = input("Give in the number of your choice: ")
+
+            if user_input == str(1):
+                print("\nTo which question would you like to assign a mentor?")
+                selected_question = input("Give in question id: ")
+                print("\n")
+
+                questions = Question.get_mentors_for_question(selected_question)
+                if questions is not None:
+                    print("You can choose from the following mentors: ")
+                    print(tabulate(questions, headers=["Id", "Mentor's name"]))
+                    print("\n")
+                    print("To which mentor would you like to assign the selected question?")
+                    selected_mentor = input("Give in mentor id: ")
+
+                    Question.assign_mentor(selected_question, selected_mentor)
+
+            if user_input == str(2):
+                print("Filtering by school:")
+                filter_by = input("Give in school: ")
+                # for tweet in Tweet.select().join(User).where(User.username == 'Charlie'):
+                #     print tweet.message
+            if user_input == str(3):
+                print("Filtering by application code:")
+                filter_by = input("Give in application code: ")
+
+            if user_input == str(4):
+                print("Filtering by mentor:")
+                filter_by = input("Give in mentor name: ")
+
+            if user_input == str(5):
+                print("Filtering by date:")
+                filter_by = input("Give in date: ")
+
+
 
 
 
