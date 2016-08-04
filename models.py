@@ -38,7 +38,7 @@ class InterviewSlot(BaseModel):
     start = DateTimeField()
     end = DateTimeField()
     reserved = BooleanField(default=False)
-    school_id = CharField(null=True)
+    school_id = IntegerField(null=True)
     mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_1")
     second_mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_2")
 
@@ -126,11 +126,11 @@ class Applicant(BaseModel):
             applicant.school = School.get(School.city == city).id
             applicant.save()
 
-    def free_interview_slot():
-        for applicant in Applicant.select().where(Applicant.interview >> None):
-            for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
-                if slot.school_id == applicant.school_id:
-                    return slot
+    # def free_interview_slot():
+    #     for applicant in Applicant.select().where(Applicant.interview >> None):
+    #         for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+    #             if slot.school_id == applicant.school_id:
+    #                 return slot
 
     @staticmethod
     def assign_interview():
@@ -138,11 +138,12 @@ class Applicant(BaseModel):
         updated_applicants = []
 
         for applicant in Applicant.select().where(Applicant.interview >> None):
+            for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+                print (slot.school_id, applicant.school_id)
+                if slot.school_id == applicant.school_id:
+                    interview = slot
+                    break
             # number_of_mentors = input("How many mentors needed for the interview?")
-            updated_applicants = []
-            for applicant in Applicant:
-                interview = Applicant.free_interview_slot()
-                print(interview)
                 if interview == None:
                     print("There is no matching applicant, please check applicants school!")
                     return []
