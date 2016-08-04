@@ -112,20 +112,30 @@ class Applicant(BaseModel):
             applicant.save()
 
     @staticmethod
+    def free_interview_slot():
+        for applicant in Applicant.select().where(Applicant.interview >> None):
+            for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+                if slot.mentor.school_id == applicant.school_id:
+                    return slot
+
+    @staticmethod
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
-        updated_applicants = []
-        for applicant in Applicant.select().where(Applicant.interview >> None):
-            interview = InterviewSlot.select().where(
-                InterviewSlot.reserved >> False,
-                InterviewSlot.mentor_id == applicant.school_id
-            ).order_by(fn.Random()).limit(1)[0]
 
-            interview.reserved = True
-            interview.save()
-            applicant.interview = interview
-            applicant.save()
-            updated_applicants.append(
-                [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
-            )
+
+        updated_applicants = []
+        for applicant in Applicant:
+            interview = Applicant.free_interview_slot()
+            print(interview)
+            if interview == None:
+                print ("There is no matching applicant, please check applicants school!")
+                return []
+            else:
+                interview.reserved = True
+                interview.save()
+                applicant.interview = interview
+                applicant.save()
+                updated_applicants.append(
+                    [applicant.first_name, applicant.last_name, applicant.application_code, applicant.interview.start]
+                )
         return updated_applicants

@@ -1,0 +1,5 @@
+
+
+<class 'models.InterviewSlot'> SELECT "t1"."id", "t1"."start", "t1"."end", "t1"."reserved", "t1"."mentor_id" FROM "interviewslot" AS t1 WHERE (("t1"."reserved" IS %s) AND %s) ORDER BY "t1"."start" [False, False]
+<class 'models.InterviewSlot'> SELECT "t1"."id", "t1"."start", "t1"."end", "t1"."reserved", "t1"."mentor_id" FROM "interviewslot" AS t1 WHERE (("t1"."reserved" IS %s) AND %s) ORDER BY "t1"."start" [False, True]
+<models.InterviewSlot object at 0x7f4836101320>
