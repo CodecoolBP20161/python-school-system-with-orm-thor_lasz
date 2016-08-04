@@ -258,7 +258,7 @@ class EightStory():
         menu_points = ["Assign questions to mentors", "By status", "By time",
                        "By applicant", "By school", "By mentor name"]
 
-        print(tabulate(Question.get_questions_for_administrator(), headers=["Question", "Answer", "Date", "Application code", "Mentor"]))
+        print(tabulate(Question.get_questions_for_administrator(), headers=["Question", "Answer", "Date", "Application code", "Mentor", "School"]))
         print("\n")
 
         user_input = None

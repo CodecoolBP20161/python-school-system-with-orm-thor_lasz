@@ -175,8 +175,10 @@ class Question(BaseModel):
         for question in cls.select():
             question_data.append([
                 question.content, question.status, question.time, question.applicant.application_code,
-                question.mentor
+                question.mentor  # , question.applicant.school.city
                 ])
-            # status, time, application_code, school, mentor name
-
+            if question.applicant.school is not None:
+                question_data[-1].append(question.applicant.school.city)
+            else:
+                question_data[-1].append("")
         return question_data
