@@ -121,12 +121,16 @@ class Applicant(BaseModel):
     @staticmethod
     def assign_school():
         """ Assigns a school to those applicants who do not have one. """
+        for applicant in Applicant.select().where(Applicant.school >> None):
+            city = City.get(City.city == applicant.city).school_city
+            applicant.school = School.get(School.city == city).id
+            applicant.save()
 
-        def free_interview_slot():
-            for applicant in Applicant.select().where(Applicant.interview >> None):
-                for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
-                    if slot.mentor.school_id == applicant.school_id:
-                        return slot
+    def free_interview_slot():
+        for applicant in Applicant.select().where(Applicant.interview >> None):
+            for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+                if slot.school_id == applicant.school_id:
+                    return slot
 
     @staticmethod
     def assign_interview():
@@ -134,25 +138,28 @@ class Applicant(BaseModel):
         updated_applicants = []
 
         for applicant in Applicant.select().where(Applicant.interview >> None):
-            #number_of_mentors = input("How many mentors needed for the interview?")
-            interview = InterviewSlot.select().where(
-                InterviewSlot.reserved >> False,
-                InterviewSlot.school_id == applicant.school_id
-            ).order_by(InterviewSlot.start.asc()).get()
+            # number_of_mentors = input("How many mentors needed for the interview?")
+            updated_applicants = []
+            for applicant in Applicant:
+                interview = Applicant.free_interview_slot()
+                print(interview)
+                if interview == None:
+                    print("There is no matching applicant, please check applicants school!")
+                    return []
+                else:
+                    interview.reserved = True
+                    interview.save()
+                    applicant.interview = interview
+                    applicant.save()
+                    updated_applicants.append(
+                        [applicant.first_name, applicant.last_name, applicant.application_code,
+                         applicant.interview.start]
+                    )
 
-            interview.reserved = True
-            interview.save()
-            applicant.interview = interview
-            applicant.save()
-            updated_applicants.append([
-                applicant.first_name, applicant.last_name,
-                applicant.application_code, applicant.interview.start,
-                str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
-                ])
-            # if number_of_mentors == 2:
-            #     for second_mentor in Mentor.select():
-            #         if second_mentor.school_id == interview.mentor.school_id and  second_mentor != interview.mentor:
-            #             mentor_2 = second_mentor
-            #             break
-        #print ("try for git")
+                # if number_of_mentors == '2':
+                #     for second_mentor in Mentor.select():
+                #         if second_mentor.school_id == interview.mentor.school_id and  second_mentor != interview.mentor:
+                #             mentor_2 = second_mentor
+                #             break
+
         return updated_applicants
