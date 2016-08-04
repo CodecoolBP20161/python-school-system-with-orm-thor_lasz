@@ -2,6 +2,7 @@ from peewee import *
 import getpass
 import random
 import string
+from tabulate import tabulate
 
 # Configure your database connection here
 # database name = should be your username on your laptop
@@ -159,6 +160,14 @@ class Question(BaseModel):
     mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
     status = CharField(default="New")
     time = DateTimeField()
+
+    @staticmethod
+    def print_result(result):
+        if result == []:
+            print("\nNo macthing question\n")
+        else:
+            print(tabulate(result, headers=["Content", "Answer", "Applicant", "Mentor", "Status"]))
+        go_on = input("\nPress any key to continue\n")
 
     @classmethod
     def get_questions_for_applicant(cls, applicant_id):

@@ -255,18 +255,21 @@ class EightStory():
         print("Eight Story:")
         print("Here you can handle the questions of the applicants.\n")
 
-        menu_points = ["Assign questions to mentors", "By status", "By time",
-                       "By applicant", "By school", "By mentor name"]
+        print(tabulate(Question.get_questions_for_administrator(),
+                      headers=["Id", "Question", "Answer", "Date", "App id", "Mentor", "School"]))
+        go_on = input("\nPress any key to continue\n")
+
+        menu_points = ["Assign questions to mentors", "By school", "By applicant",
+                       "By mentor name", "By status", "By time"]
 
         user_input = None
         while user_input != "x":
-            print(tabulate(Question.get_questions_for_administrator(), headers=["Id", "Question", "Answer", "Date", "App id", "Mentor", "School"]))
-            print("\n")
+
             for point in menu_points:
                 print("{0}.: {1}".format(menu_points.index(point) + 1, point))
             print("\nPress 'x' to exit\n")
             user_input = input("Give in the number of your choice: ")
-
+            result = []
             if user_input == str(1):
                 print("\nTo which question would you like to assign a mentor?")
                 selected_question = input("Give in question id: ")
@@ -285,22 +288,44 @@ class EightStory():
             if user_input == str(2):
                 print("Filtering by school:")
                 filter_by = input("Give in school: ")
-                # for tweet in Tweet.select().join(User).where(User.username == 'Charlie'):
-                #     print tweet.message
+                for question in Question.select():
+                    try:
+                        if question.applicant.school.city == filter_by:
+                            result.append((question.content, question.answer, question.applicant_id, question.mentor_id, question.status))
+                    except AttributeError:
+                        continue
+                Question.print_result(result)
+
+
             if user_input == str(3):
                 print("Filtering by application code:")
                 filter_by = input("Give in application code: ")
+                for question in Question.select():
+                    if question.applicant.application_code == filter_by:
+                        result.append ([question.content, question.answer, question.applicant_id, question.mentor_id, question.status])
+                Question.print_result(result)
+
 
             if user_input == str(4):
                 print("Filtering by mentor:")
                 filter_by = input("Give in mentor name: ")
+                for question in Question.select():
+                    full_name = str(question.mentor.first_name + ' ' + question.mentor.last_name)
+                    if full_name == filter_by:
+                        result.append([question.content, question.answer, question.applicant_id, question.mentor_id, question.status])
+                Question.print_result(result)
 
             if user_input == str(5):
+                print("Filtering by status:")
+                filter_by = input("Give in status: ")
+                result = Question.select().where(Question.status == filter_by).tuples()
+                Question.print_result(result)
+
+            if user_input == str(6):
                 print("Filtering by date:")
-                filter_by = input("Give in date: ")
-
-
-
+                filter_by = input("Give in date (yr-mth-day: ")
+                result = Question.select().where(Question.time > filter_by).tuples()
+                Question.print_result(result)
 
 
 
