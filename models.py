@@ -134,6 +134,7 @@ class Applicant(BaseModel):
         updated_applicants = []
 
         for applicant in Applicant.select().where(Applicant.interview >> None):
+            #number_of_mentors = input("How many mentors needed for the interview?")
             interview = InterviewSlot.select().where(
                 InterviewSlot.reserved >> False,
                 InterviewSlot.school_id == applicant.school_id
@@ -148,5 +149,10 @@ class Applicant(BaseModel):
                 applicant.application_code, applicant.interview.start,
                 str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
                 ])
-        print ("try for git")
+            # if number_of_mentors == 2:
+            #     for second_mentor in Mentor.select():
+            #         if second_mentor.school_id == interview.mentor.school_id and  second_mentor != interview.mentor:
+            #             mentor_2 = second_mentor
+            #             break
+        #print ("try for git")
         return updated_applicants
