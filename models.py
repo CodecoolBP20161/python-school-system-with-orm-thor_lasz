@@ -136,31 +136,36 @@ class Applicant(BaseModel):
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
         updated_applicants = []
-
+        interview = None
         for applicant in Applicant.select().where(Applicant.interview >> None):
+            number_of_mentors = input("How many mentors needed for the interview?")
             for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
-                print (slot.school_id, applicant.school_id)
                 if slot.school_id == applicant.school_id:
                     interview = slot
                     break
-            # number_of_mentors = input("How many mentors needed for the interview?")
-                if interview == None:
-                    print("There is no matching applicant, please check applicants school!")
-                    return []
-                else:
-                    interview.reserved = True
-                    interview.save()
-                    applicant.interview = interview
-                    applicant.save()
-                    updated_applicants.append(
-                        [applicant.first_name, applicant.last_name, applicant.application_code,
-                         applicant.interview.start]
-                    )
 
-                # if number_of_mentors == '2':
-                #     for second_mentor in Mentor.select():
-                #         if second_mentor.school_id == interview.mentor.school_id and  second_mentor != interview.mentor:
-                #             mentor_2 = second_mentor
-                #             break
+            if interview == None:
+                print("There is no matching applicant, please check applicants school!")
+                break
+            else:
+                interview.reserved = True
+                interview.save()
+                applicant.interview = interview
+                applicant.save()
+                updated_applicants.append(
+                    [applicant.first_name, applicant.last_name, applicant.application_code,
+                     applicant.interview.start]
+                )
+
+                if number_of_mentors == '2':
+                    print ("i'm in")
+                    for mentor_b in Mentor.select():
+                        if mentor_b.school_id == interview.school_id and  mentor_b != interview.mentor:
+                            print (mentor_b.id)
+                            interview.second_mentor = mentor_b
+                            interview.save()
+                            break
+                else:
+                    continue
 
         return updated_applicants
