@@ -152,7 +152,7 @@ class FifthStory():
         print("You asked questions from Codecool. Here you can check whether they are answered. ")
 
         current_application_code = input("Please give in your application code: ")
-        applicants_questions = Question.get_questions(current_application_code)
+        applicants_questions = Question.get_questions_for_applicant(current_application_code)
 
         print("\nYou have the following questions:\n")
         print(tabulate(applicants_questions, headers=["Question", "Answer", "Mentor", "Status"]))
@@ -247,6 +247,17 @@ class SixthStory():
                 print ("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
+
+
+class EightStory():
+
+    def __init__(self):
+        print("Eight Story:")
+        print("Here you can handle the questions of the applicants.\n")
+
+        print(tabulate(Question.get_questions_for_administrator()))
+        print("\n")
+
 
 
 class NinthStory():

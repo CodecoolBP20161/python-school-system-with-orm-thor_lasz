@@ -31,12 +31,18 @@ class Populator():
         """ Contains the example data for populating the tables in the database. """
 
         questions = [
-            {"content": "Who are those horrible orange creatures over there?", "applicant": 1},
-            {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1},
-            {"content": "Is it just coincidence that Zoidberg is poor and miserably lonely?", "applicant": 2},
-            {"content": "What makes a good man go neutral?", "applicant": 3},
-            {"content": "Did everything just taste purple?", "applicant": 5},
-            {"content": "Do you see a robot in this room named Folder?", "applicant": 8}
+            {"content": "Who are those horrible orange creatures over there?", "applicant": 1,
+                "time": datetime(2016, 8, 16, 7, 12)},
+            {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1,
+                "time": datetime(2016, 7, 20, 11, 32)},
+            {"content": "Is it just coincidence that Zoidberg is poor and miserably lonely?", "applicant": 2,
+                "time": datetime(2016, 8, 21, 11, 56)},
+            {"content": "What makes a good man go neutral?", "applicant": 3,
+                "time": datetime(2016, 8, 11, 18, 21)},
+            {"content": "Did everything just taste purple?", "applicant": 5,
+                "time": datetime(2016, 8, 10, 19, 51)},
+            {"content": "Do you see a robot in this room named Folder?", "applicant": 8,
+                "time": datetime(2016, 7, 15, 23, 38)}
         ]
 
         interview_slots = [

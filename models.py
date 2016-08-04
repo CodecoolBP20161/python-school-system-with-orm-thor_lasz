@@ -158,11 +158,26 @@ class Question(BaseModel):
     applicant = ForeignKeyField(Applicant, related_name="applicant_question", null=True)
     mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
     status = CharField(default="New")
+    time = DateTimeField()
 
     @classmethod
-    def get_questions(cls, applicant_id):
+    def get_questions_for_applicant(cls, applicant_id):
         applicants_questions = []
         for question in cls.select().join(Applicant).where(Applicant.application_code == applicant_id):
             applicants_questions.append([question.content, question.answer, question.mentor, question.status])
 
         return applicants_questions
+
+    @classmethod
+    def get_questions_for_administrator(cls):
+        question_data = []
+
+        for question in cls.select():
+            print(question.mentor)
+            question_data.append([
+                question.content, question.status, question.time, question.applicant.application_code,
+                question.mentor
+                ])
+            # status, time, application_code, school, mentor name
+
+        return question_data
