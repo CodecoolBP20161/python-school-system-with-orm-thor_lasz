@@ -146,5 +146,5 @@ class Applicant(BaseModel):
                 applicant.application_code, applicant.interview.start,
                 str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
                 ])
-
+        print ("try for git")
         return updated_applicants
