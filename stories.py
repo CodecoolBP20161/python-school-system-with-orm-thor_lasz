@@ -84,6 +84,10 @@ class SecondStory():
                 print(tabulate(updated_applicants, headers=["First name", "Last name", "Unique id",
                                                             "Interview", "Mentor"]))
                 print("\n")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0176501ed5ee0223cccf92df3ac83e3d2d5c3efb
 
     @staticmethod
     def create_email_body(applicant):
@@ -154,7 +158,7 @@ class FifthStory():
         print("You asked questions from Codecool. Here you can check whether they are answered. ")
 
         current_application_code = input("Please give in your application code: ")
-        applicants_questions = Question.get_questions(current_application_code)
+        applicants_questions = Question.get_questions_for_applicant(current_application_code)
 
         print("\nYou have the following questions:\n")
         print(tabulate(applicants_questions, headers=["Question", "Answer", "Mentor", "Status"]))
@@ -249,6 +253,86 @@ class SixthStory():
                 print ("\n")
                 print(tabulate(result, headers=["First name", "Last name", "Email", "City"]))
                 print("\n\n")
+
+
+class EightStory():
+
+    def __init__(self):
+        print("Eight Story:")
+        print("Here you can handle the questions of the applicants.\n")
+
+        print(tabulate(Question.get_questions_for_administrator(),
+                      headers=["Id", "Question", "Answer", "Date", "App id", "Mentor", "School"]))
+        go_on = input("\nPress any key to continue\n")
+
+        menu_points = ["Assign questions to mentors", "By school", "By applicant",
+                       "By mentor name", "By status", "By time"]
+
+        user_input = None
+        while user_input != "x":
+
+            for point in menu_points:
+                print("{0}.: {1}".format(menu_points.index(point) + 1, point))
+            print("\nPress 'x' to exit\n")
+            user_input = input("Give in the number of your choice: ")
+            result = []
+            if user_input == str(1):
+                print("\nTo which question would you like to assign a mentor?")
+                selected_question = input("Give in question id: ")
+                print("\n")
+
+                questions = Question.get_mentors_for_question(selected_question)
+                if questions is not None:
+                    print("You can choose from the following mentors: ")
+                    print(tabulate(questions, headers=["Id", "Mentor's name"]))
+                    print("\n")
+                    print("To which mentor would you like to assign the selected question?")
+                    selected_mentor = input("Give in mentor id: ")
+
+                    Question.assign_mentor(selected_question, selected_mentor)
+
+            if user_input == str(2):
+                print("Filtering by school:")
+                filter_by = input("Give in school: ")
+                for question in Question.select():
+                    try:
+                        if question.applicant.school.city == filter_by:
+                            result.append((question.content, question.answer, question.applicant_id, question.mentor_id, question.status))
+                    except AttributeError:
+                        continue
+                Question.print_result(result)
+
+
+            if user_input == str(3):
+                print("Filtering by application code:")
+                filter_by = input("Give in application code: ")
+                for question in Question.select():
+                    if question.applicant.application_code == filter_by:
+                        result.append ([question.content, question.answer, question.applicant_id, question.mentor_id, question.status])
+                Question.print_result(result)
+
+
+            if user_input == str(4):
+                print("Filtering by mentor:")
+                filter_by = input("Give in mentor name: ")
+                for question in Question.select():
+                    full_name = str(question.mentor.first_name + ' ' + question.mentor.last_name)
+                    if full_name == filter_by:
+                        result.append([question.content, question.answer, question.applicant_id, question.mentor_id, question.status])
+                Question.print_result(result)
+
+            if user_input == str(5):
+                print("Filtering by status:")
+                filter_by = input("Give in status: ")
+                result = Question.select().where(Question.status == filter_by).tuples()
+                Question.print_result(result)
+
+            if user_input == str(6):
+                print("Filtering by date:")
+                filter_by = input("Give in date (yr-mth-day: ")
+                result = Question.select().where(Question.time > filter_by).tuples()
+                Question.print_result(result)
+
 
 
 class NinthStory():

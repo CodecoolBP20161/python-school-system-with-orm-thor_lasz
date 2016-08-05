@@ -22,7 +22,8 @@ class MainMenu():
         self.administrator_menu = OrderedDict([
             ("1", ("Story 1: Handle new applications", FirstStory)),
             ("2", ("Story 2: Assign interview slot to applicants", SecondStory)),
-            ("3", ("Story 6: Application detail", SixthStory))
+            ("3", ("Story 6: Application detail", SixthStory)),
+            ("4", ("Story 8: Handle the questions of the applicants", EightStory))
         ])
 
         self.applicant_menu = OrderedDict([

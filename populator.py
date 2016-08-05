@@ -31,12 +31,18 @@ class Populator():
         """ Contains the example data for populating the tables in the database. """
 
         questions = [
-            {"content": "Who are those horrible orange creatures over there?", "applicant": 1},
-            {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1},
-            {"content": "Is it just coincidence that Zoidberg is poor and miserably lonely?", "applicant": 2},
-            {"content": "What makes a good man go neutral?", "applicant": 3},
-            {"content": "Did everything just taste purple?", "applicant": 5},
-            {"content": "Do you see a robot in this room named Folder?", "applicant": 8}
+            {"content": "Who are those horrible orange creatures over there?", "applicant": 1,
+                "time": datetime(2016, 8, 16, 7, 12)},
+            {"content": "Wow, your kid's really good. How hard do you have to hit him?", "applicant": 1,
+                "time": datetime(2016, 7, 20, 11, 32)},
+            {"content": "Is it just coincidence that Zoidberg is poor and miserably lonely?", "applicant": 2,
+                "time": datetime(2016, 8, 21, 11, 56)},
+            {"content": "What makes a good man go neutral?", "applicant": 3,
+                "time": datetime(2016, 8, 11, 18, 21)},
+            {"content": "Did everything just taste purple?", "applicant": 5,
+                "time": datetime(2016, 8, 10, 19, 51)},
+            {"content": "Do you see a robot in this room named Folder?", "applicant": 8,
+                "time": datetime(2016, 7, 15, 23, 38)}
         ]
 
         interview_slots = [
@@ -67,32 +73,32 @@ class Populator():
             {"city": "New New York", "school_city": "Budapest"}
         ]
 
-        applicants = [
-            {"first_name": "Jack", "last_name": "Johnson", "email": "jackjohnson@gmail.com",
-                "city": "Érd", "application_code": "GFJEDF"},
-            {"first_name": "John", "last_name": "Jackson", "email": "johnjackson@gmail.com",
-                "city": "Kiskunbüdösbütykös", "application_code": None},
-            {"first_name": "Amy", "last_name": "Wong", "email": "awong79@marslink.web",
-                "city": "Mars", "application_code": None},
-            {"first_name": "Bender", "last_name": "Rodriguez", "email": "bender@ilovebender.com",
-                "city": "Tijuana", "application_code": None},
-            {"first_name": "John", "last_name": "Zoidberg", "email": "zoidberg@decapodians.deca",
-                "city": "Decapod 10", "application_code": None},
-            {"first_name": "Kif", "last_name": "Kroker", "email": "iamgreen@military.earth",
-                "city": "Nimbus", "application_code": None},
-            {"first_name": "Zapp", "last_name": "Brannigan", "email": "lovethezapper@military.earth",
-                "city": "Nimbus", "application_code": None},
-            {"first_name": "Hermes", "last_name": "Conrad", "email": "bureaucrat_conrad@gmail.com",
-                "city": "New New York", "application_code": None},
-            {"first_name": "Antonio", "last_name": "Calculon", "email": "allmycircuits@gmail.com",
-                "city": "New New York", "application_code": None},
-            {"first_name": "Philip", "last_name": "Fry", "email": "iloveleela@gmail.com", "city":
-                "New New York", "application_code": None}
-        ]
-
         bp = School.create(city="Budapest")
         miskolc = School.create(city="Miskolc")
         krakow = School.create(city="Krakow")
+
+        applicants = [
+            {"first_name": "Jack", "last_name": "Johnson", "email": "jackjohnson@gmail.com",
+                "city": "Érd", "application_code": "GFJEDF", "school": bp},
+            {"first_name": "John", "last_name": "Jackson", "email": "johnjackson@gmail.com",
+                "city": "Kiskunbüdösbütykös", "application_code": None, "school": None},
+            {"first_name": "Amy", "last_name": "Wong", "email": "awong79@marslink.web",
+                "city": "Mars", "application_code": None, "school": None},
+            {"first_name": "Bender", "last_name": "Rodriguez", "email": "bender@ilovebender.com",
+                "city": "Tijuana", "application_code": None, "school": None},
+            {"first_name": "John", "last_name": "Zoidberg", "email": "zoidberg@decapodians.deca",
+                "city": "Decapod 10", "application_code": None, "school": None},
+            {"first_name": "Kif", "last_name": "Kroker", "email": "iamgreen@military.earth",
+                "city": "Nimbus", "application_code": None, "school": None},
+            {"first_name": "Zapp", "last_name": "Brannigan", "email": "lovethezapper@military.earth",
+                "city": "Nimbus", "application_code": None, "school": None},
+            {"first_name": "Hermes", "last_name": "Conrad", "email": "bureaucrat_conrad@gmail.com",
+                "city": "New New York", "application_code": None, "school": None},
+            {"first_name": "Antonio", "last_name": "Calculon", "email": "allmycircuits@gmail.com",
+                "city": "New New York", "application_code": None, "school": None},
+            {"first_name": "Philip", "last_name": "Fry", "email": "iloveleela@gmail.com", "city":
+                "New New York", "application_code": None, "school": None}
+        ]
 
         mentors = [
             {"first_name": "Hubert", "last_name": "Farnsworth", "email": "", "school": bp},

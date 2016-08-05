@@ -2,6 +2,7 @@ from peewee import *
 import getpass
 import random
 import string
+from tabulate import tabulate
 
 # Configure your database connection here
 # database name = should be your username on your laptop
@@ -179,11 +180,63 @@ class Question(BaseModel):
     applicant = ForeignKeyField(Applicant, related_name="applicant_question", null=True)
     mentor = ForeignKeyField(Mentor, related_name="mentor_question", null=True)
     status = CharField(default="New")
+    time = DateTimeField()
+
+    @staticmethod
+    def print_result(result):
+        if result == []:
+            print("\nNo macthing question\n")
+        else:
+            print(tabulate(result, headers=["Content", "Answer", "Applicant", "Mentor", "Status"]))
+        go_on = input("\nPress any key to continue\n")
 
     @classmethod
-    def get_questions(cls, applicant_id):
+    def get_questions_for_applicant(cls, applicant_id):
         applicants_questions = []
         for question in cls.select().join(Applicant).where(Applicant.application_code == applicant_id):
             applicants_questions.append([question.content, question.answer, question.mentor, question.status])
 
         return applicants_questions
+
+    @classmethod
+    def get_questions_for_administrator(cls):
+        question_data = []
+
+        for question in cls.select():
+            question_data.append([
+                question.id, question.content, question.status, question.time, question.applicant.application_code
+                ])
+            if question.mentor is not None:
+                question_data[-1].append(str(question.mentor.first_name + " " + question.mentor.last_name))
+            else:
+                question_data[-1].append("")
+            if question.applicant.school is not None:
+                question_data[-1].append(question.applicant.school.city)
+            else:
+                question_data[-1].append("")
+        return question_data
+
+    @classmethod
+    def get_mentors_for_question(cls, selected_question):
+        mentors = []
+
+        try:
+            school_id = cls.get(cls.id == selected_question).applicant.school.id
+        except AttributeError:
+            print("You cannot assign a mentor to a question, if the applicant is not assigned to a school!\n")
+            return
+        except Question.DoesNotExist:
+            print("Please choose a valid question id!\n")
+            return
+
+        for mentor in Mentor.select().join(School).where(School.id == school_id):
+            mentors.append([mentor.id, mentor.first_name + " " + mentor.last_name])
+
+        return mentors
+
+    @classmethod
+    def assign_mentor(cls, question_id, mentor_id):
+        question = cls.get(cls.id == question_id)
+        question.mentor = mentor_id
+        question.status = "Waiting for answer"
+        question.save()
