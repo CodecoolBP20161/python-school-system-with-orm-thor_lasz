@@ -39,7 +39,7 @@ class InterviewSlot(BaseModel):
     start = DateTimeField()
     end = DateTimeField()
     reserved = BooleanField(default=False)
-    school_id = CharField(null=True)
+    school_id = IntegerField(null=True)
     mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_1")
     second_mentor = ForeignKeyField(Mentor, null=True, related_name="interviewslot_2")
 
@@ -127,28 +127,50 @@ class Applicant(BaseModel):
             applicant.school = School.get(School.city == city).id
             applicant.save()
 
+    # def free_interview_slot():
+    #     for applicant in Applicant.select().where(Applicant.interview >> None):
+    #         for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+    #             if slot.school_id == applicant.school_id:
+    #                 return slot
+
     @staticmethod
     def assign_interview():
         """ Assigns an interview to those applicants who do not have one and returns them in a list. """
         updated_applicants = []
-
+        interview = None
         for applicant in Applicant.select().where(Applicant.interview >> None):
-            if applicant.school_id is None:
-                return None
-            interview = InterviewSlot.select().where(
-                InterviewSlot.reserved >> False,
-                InterviewSlot.school_id == applicant.school_id
-            ).order_by(InterviewSlot.start.asc()).get()
 
-            interview.reserved = True
-            interview.save()
-            applicant.interview = interview
-            applicant.save()
-            updated_applicants.append([
-                applicant.first_name, applicant.last_name,
-                applicant.application_code, applicant.interview.start,
-                str(applicant.interview.mentor.first_name + " " + applicant.interview.mentor.last_name)
-                ])
+            number_of_mentors = input("How many mentors needed for the interview? ")
+            for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
+                if slot.school_id == applicant.school_id:
+                    interview = slot
+                    break
+
+            if interview == None:
+                print("There is no matching applicant, please check applicants school!")
+                break
+            else:
+                interview.reserved = True
+                interview.save()
+                applicant.interview = interview
+                applicant.save()
+                updated_applicants.append(
+                    [applicant.first_name, applicant.last_name, applicant.application_code,
+                     applicant.interview.start, applicant.interview.mentor.first_name,
+                     applicant.interview.mentor.last_name]
+                )
+
+                if number_of_mentors == '2':
+                    print ("i'm in")
+                    for mentor_b in Mentor.select():
+                        if mentor_b.school_id == interview.school_id and  mentor_b != interview.mentor:
+                            print (mentor_b.id)
+                            interview.second_mentor = mentor_b
+                            interview.save()
+                            break
+                else:
+                    continue
+
 
         return updated_applicants
 

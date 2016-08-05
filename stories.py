@@ -72,6 +72,7 @@ class SecondStory():
             return
         else:
             updated_applicants = Applicant.assign_interview()
+# <<<<<<< HEAD
             if updated_applicants is None:
                 print("\nPlease assign the applicants to school before assigning them an interview in their school.\n")
             else:
@@ -84,12 +85,14 @@ class SecondStory():
                                                             "Interview", "Mentor"]))
                 print("\n")
 
+
     @staticmethod
     def create_email_body(applicant):
         message = "Dear {} {}! \nWe are glad to inform you, that you have been assigned an interview slot at " \
-            "Codecool. The date of the interview is {} and it will be held by {}.\n\nThe Codecool team" \
-            "".format(applicant[0], applicant[1], applicant[3], applicant[4])
+            "Codecool. The date of the interview is {} and it will be held by {} {}.\n\nThe Codecool team" \
+            "".format(applicant[0], applicant[1], applicant[3], applicant[4], applicant[5])
         return message
+
 
 
 class ThirdStory():
