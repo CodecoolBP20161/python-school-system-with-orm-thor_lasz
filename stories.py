@@ -342,3 +342,4 @@ class NinthStory():
         print("\n")
         print(tabulate(interview_data, headers=["Start", "End", "Applicant's name", "Application code"]))
         print("\n")
+
