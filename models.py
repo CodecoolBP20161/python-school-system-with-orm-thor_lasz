@@ -138,7 +138,7 @@ class Applicant(BaseModel):
         updated_applicants = []
         interview = None
         for applicant in Applicant.select().where(Applicant.interview >> None):
-            number_of_mentors = input("How many mentors needed for the interview?")
+            number_of_mentors = input("How many mentors needed for the interview? ")
             for slot in InterviewSlot.select().where(InterviewSlot.reserved >> False).order_by(InterviewSlot.start):
                 if slot.school_id == applicant.school_id:
                     interview = slot
@@ -154,7 +154,8 @@ class Applicant(BaseModel):
                 applicant.save()
                 updated_applicants.append(
                     [applicant.first_name, applicant.last_name, applicant.application_code,
-                     applicant.interview.start]
+                     applicant.interview.start, applicant.interview.mentor.first_name,
+                     applicant.interview.mentor.last_name]
                 )
 
                 if number_of_mentors == '2':
